@@ -6,9 +6,10 @@
 *.userosscache
 *.sln.docstates
 
-## Visual Studio
+## Visual Studio / IDEs
 .vs/
 .vscode/
+.idea/
 
 ## macOS
 .DS_Store
