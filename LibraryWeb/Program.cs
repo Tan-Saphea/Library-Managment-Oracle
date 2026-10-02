@@ -145,22 +145,22 @@ app.MapPost("/api/students", async (HttpContext ctx) =>
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.BindByName = true;
 
-        cmd.Parameters.Add("p_StuName", OracleDbType.Varchar2, root.GetProperty("stuName").GetString(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_Gender", OracleDbType.Varchar2, root.TryGetProperty("gender", out var g) ? g.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_DOB", OracleDbType.Date, root.TryGetProperty("dob", out var d) && DateTime.TryParse(d.GetString(), out var dt) ? dt : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_POB", OracleDbType.Varchar2, root.TryGetProperty("pob", out var p) ? p.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Address", OracleDbType.Varchar2, root.TryGetProperty("address", out var a) ? a.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Phone", OracleDbType.Varchar2, root.TryGetProperty("phone", out var ph) ? ph.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Email", OracleDbType.Varchar2, root.TryGetProperty("email", out var em) ? em.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_stu_name", OracleDbType.Varchar2, root.GetProperty("stuName").GetString(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_gender", OracleDbType.Varchar2, root.TryGetProperty("gender", out var g) ? g.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_dob", OracleDbType.Date, root.TryGetProperty("dob", out var d) && DateTime.TryParse(d.GetString(), out var dt) ? dt : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_pob", OracleDbType.Varchar2, root.TryGetProperty("pob", out var p) ? p.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_address", OracleDbType.Varchar2, root.TryGetProperty("address", out var a) ? a.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_phone", OracleDbType.Varchar2, root.TryGetProperty("phone", out var ph) ? ph.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_email", OracleDbType.Varchar2, root.TryGetProperty("email", out var em) ? em.GetString() : (object)DBNull.Value, ParameterDirection.Input);
 
         byte[]? photoBytes = null;
         if (root.TryGetProperty("photo", out var photoEl) && !string.IsNullOrEmpty(photoEl.GetString()))
         {
             photoBytes = Convert.FromBase64String(photoEl.GetString()!);
         }
-        cmd.Parameters.Add("p_Photo", OracleDbType.Blob, (object?)photoBytes ?? DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_photo", OracleDbType.Blob, (object?)photoBytes ?? DBNull.Value, ParameterDirection.Input);
 
-        var pNewId = new OracleParameter("p_new_stuid", OracleDbType.Int32, ParameterDirection.Output);
+        var pNewId = new OracleParameter("p_new_id", OracleDbType.Decimal, ParameterDirection.Output);
         cmd.Parameters.Add(pNewId);
 
         cmd.ExecuteNonQuery();
@@ -188,21 +188,21 @@ app.MapPut("/api/students/{id:int}", async (int id, HttpContext ctx) =>
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.BindByName = true;
 
-        cmd.Parameters.Add("p_StuID", OracleDbType.Int32, id, ParameterDirection.Input);
-        cmd.Parameters.Add("p_StuName", OracleDbType.Varchar2, root.GetProperty("stuName").GetString(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_Gender", OracleDbType.Varchar2, root.TryGetProperty("gender", out var g) ? g.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_DOB", OracleDbType.Date, root.TryGetProperty("dob", out var d) && DateTime.TryParse(d.GetString(), out var dt) ? dt : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_POB", OracleDbType.Varchar2, root.TryGetProperty("pob", out var p) ? p.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Address", OracleDbType.Varchar2, root.TryGetProperty("address", out var a) ? a.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Phone", OracleDbType.Varchar2, root.TryGetProperty("phone", out var ph) ? ph.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Email", OracleDbType.Varchar2, root.TryGetProperty("email", out var em) ? em.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_stu_id", OracleDbType.Int32, id, ParameterDirection.Input);
+        cmd.Parameters.Add("p_stu_name", OracleDbType.Varchar2, root.GetProperty("stuName").GetString(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_gender", OracleDbType.Varchar2, root.TryGetProperty("gender", out var g) ? g.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_dob", OracleDbType.Date, root.TryGetProperty("dob", out var d) && DateTime.TryParse(d.GetString(), out var dt) ? dt : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_pob", OracleDbType.Varchar2, root.TryGetProperty("pob", out var p) ? p.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_address", OracleDbType.Varchar2, root.TryGetProperty("address", out var a) ? a.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_phone", OracleDbType.Varchar2, root.TryGetProperty("phone", out var ph) ? ph.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_email", OracleDbType.Varchar2, root.TryGetProperty("email", out var em) ? em.GetString() : (object)DBNull.Value, ParameterDirection.Input);
 
         byte[]? photoBytes = null;
         if (root.TryGetProperty("photo", out var photoEl) && !string.IsNullOrEmpty(photoEl.GetString()))
         {
             photoBytes = Convert.FromBase64String(photoEl.GetString()!);
         }
-        cmd.Parameters.Add("p_Photo", OracleDbType.Blob, (object?)photoBytes ?? DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_photo", OracleDbType.Blob, (object?)photoBytes ?? DBNull.Value, ParameterDirection.Input);
 
         cmd.ExecuteNonQuery();
         return Results.Ok(new { success = true });
@@ -222,7 +222,7 @@ app.MapDelete("/api/students/{id:int}", (int id) =>
         using var cmd = new OracleCommand("SP_STUDENT_DELETE", conn);
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.BindByName = true;
-        cmd.Parameters.Add("p_StuID", OracleDbType.Int32, id, ParameterDirection.Input);
+        cmd.Parameters.Add("p_stu_id", OracleDbType.Int32, id, ParameterDirection.Input);
         cmd.ExecuteNonQuery();
         return Results.Ok(new { success = true });
     }
@@ -323,17 +323,17 @@ app.MapPost("/api/books", async (HttpContext ctx) =>
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.BindByName = true;
 
-        cmd.Parameters.Add("p_BookTitle", OracleDbType.Varchar2, root.GetProperty("bookTitle").GetString(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_BookTypeID", OracleDbType.Int32, root.GetProperty("bookTypeID").GetInt32(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_PublishDate", OracleDbType.Date, root.TryGetProperty("publishDate", out var pd) && DateTime.TryParse(pd.GetString(), out var pdate) ? pdate : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_NumOfPages", OracleDbType.Int32, root.GetProperty("numOfPages").GetInt32(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_NumCopies", OracleDbType.Int32, root.GetProperty("numCopies").GetInt32(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_Edition", OracleDbType.Varchar2, root.TryGetProperty("edition", out var ed) ? ed.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Publisher", OracleDbType.Varchar2, root.TryGetProperty("publisher", out var pub) ? pub.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_BookSource", OracleDbType.Varchar2, root.TryGetProperty("bookSource", out var bs) ? bs.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Remark", OracleDbType.Varchar2, root.TryGetProperty("remark", out var rem) ? rem.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_book_title", OracleDbType.Varchar2, root.GetProperty("bookTitle").GetString(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_book_type_id", OracleDbType.Int32, root.GetProperty("bookTypeID").GetInt32(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_publish_date", OracleDbType.Date, root.TryGetProperty("publishDate", out var pd) && DateTime.TryParse(pd.GetString(), out var pdate) ? pdate : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_num_of_pages", OracleDbType.Int32, root.GetProperty("numOfPages").GetInt32(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_num_copies", OracleDbType.Int32, root.GetProperty("numCopies").GetInt32(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_edition", OracleDbType.Varchar2, root.TryGetProperty("edition", out var ed) ? ed.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_publisher", OracleDbType.Varchar2, root.TryGetProperty("publisher", out var pub) ? pub.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_book_source", OracleDbType.Varchar2, root.TryGetProperty("bookSource", out var bs) ? bs.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_remark", OracleDbType.Varchar2, root.TryGetProperty("remark", out var rem) ? rem.GetString() : (object)DBNull.Value, ParameterDirection.Input);
 
-        var pNewId = new OracleParameter("p_new_bookid", OracleDbType.Int32, ParameterDirection.Output);
+        var pNewId = new OracleParameter("p_new_id", OracleDbType.Decimal, ParameterDirection.Output);
         cmd.Parameters.Add(pNewId);
 
         cmd.ExecuteNonQuery();
@@ -361,16 +361,16 @@ app.MapPut("/api/books/{id:int}", async (int id, HttpContext ctx) =>
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.BindByName = true;
 
-        cmd.Parameters.Add("p_BookID", OracleDbType.Int32, id, ParameterDirection.Input);
-        cmd.Parameters.Add("p_BookTitle", OracleDbType.Varchar2, root.GetProperty("bookTitle").GetString(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_BookTypeID", OracleDbType.Int32, root.GetProperty("bookTypeID").GetInt32(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_PublishDate", OracleDbType.Date, root.TryGetProperty("publishDate", out var pd) && DateTime.TryParse(pd.GetString(), out var pdate) ? pdate : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_NumOfPages", OracleDbType.Int32, root.GetProperty("numOfPages").GetInt32(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_NumCopies", OracleDbType.Int32, root.GetProperty("numCopies").GetInt32(), ParameterDirection.Input);
-        cmd.Parameters.Add("p_Edition", OracleDbType.Varchar2, root.TryGetProperty("edition", out var ed) ? ed.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Publisher", OracleDbType.Varchar2, root.TryGetProperty("publisher", out var pub) ? pub.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_BookSource", OracleDbType.Varchar2, root.TryGetProperty("bookSource", out var bs) ? bs.GetString() : (object)DBNull.Value, ParameterDirection.Input);
-        cmd.Parameters.Add("p_Remark", OracleDbType.Varchar2, root.TryGetProperty("remark", out var rem) ? rem.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_book_id", OracleDbType.Int32, id, ParameterDirection.Input);
+        cmd.Parameters.Add("p_book_title", OracleDbType.Varchar2, root.GetProperty("bookTitle").GetString(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_book_type_id", OracleDbType.Int32, root.GetProperty("bookTypeID").GetInt32(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_publish_date", OracleDbType.Date, root.TryGetProperty("publishDate", out var pd) && DateTime.TryParse(pd.GetString(), out var pdate) ? pdate : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_num_of_pages", OracleDbType.Int32, root.GetProperty("numOfPages").GetInt32(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_num_copies", OracleDbType.Int32, root.GetProperty("numCopies").GetInt32(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_edition", OracleDbType.Varchar2, root.TryGetProperty("edition", out var ed) ? ed.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_publisher", OracleDbType.Varchar2, root.TryGetProperty("publisher", out var pub) ? pub.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_book_source", OracleDbType.Varchar2, root.TryGetProperty("bookSource", out var bs) ? bs.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_remark", OracleDbType.Varchar2, root.TryGetProperty("remark", out var rem) ? rem.GetString() : (object)DBNull.Value, ParameterDirection.Input);
 
         cmd.ExecuteNonQuery();
         return Results.Ok(new { success = true });
@@ -390,7 +390,7 @@ app.MapDelete("/api/books/{id:int}", (int id) =>
         using var cmd = new OracleCommand("SP_BOOK_DELETE", conn);
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.BindByName = true;
-        cmd.Parameters.Add("p_BookID", OracleDbType.Int32, id, ParameterDirection.Input);
+        cmd.Parameters.Add("p_book_id", OracleDbType.Int32, id, ParameterDirection.Input);
         cmd.ExecuteNonQuery();
         return Results.Ok(new { success = true });
     }
@@ -447,6 +447,108 @@ app.MapGet("/api/authors/search", (string? q) =>
             photo = r["Photo"] == DBNull.Value ? null : Convert.ToBase64String((byte[])r["Photo"])
         });
         return Results.Ok(list);
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+});
+
+app.MapPost("/api/authors", async (HttpContext ctx) =>
+{
+    using var reader = new StreamReader(ctx.Request.Body);
+    var json = await reader.ReadToEndAsync();
+    var doc = JsonDocument.Parse(json);
+    var root = doc.RootElement;
+
+    try
+    {
+        using var conn = new OracleConnection(ConnectionString);
+        conn.Open();
+        using var cmd = new OracleCommand("SP_AUTHOR_INSERT", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.BindByName = true;
+
+        cmd.Parameters.Add("p_author_name", OracleDbType.Varchar2, root.GetProperty("authorName").GetString(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_gender", OracleDbType.Varchar2, root.TryGetProperty("gender", out var g) ? g.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_dob", OracleDbType.Date, root.TryGetProperty("dob", out var d) && DateTime.TryParse(d.GetString(), out var dt) ? dt : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_pob", OracleDbType.Varchar2, root.TryGetProperty("pob", out var p) ? p.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_address", OracleDbType.Varchar2, root.TryGetProperty("address", out var a) ? a.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_phone", OracleDbType.Varchar2, root.TryGetProperty("phone", out var ph) ? ph.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_email", OracleDbType.Varchar2, root.TryGetProperty("email", out var em) ? em.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+
+        byte[]? photoBytes = null;
+        if (root.TryGetProperty("photo", out var photoEl) && !string.IsNullOrEmpty(photoEl.GetString()))
+        {
+            photoBytes = Convert.FromBase64String(photoEl.GetString()!);
+        }
+        cmd.Parameters.Add("p_photo", OracleDbType.Blob, (object?)photoBytes ?? DBNull.Value, ParameterDirection.Input);
+
+        var pNewId = new OracleParameter("p_new_id", OracleDbType.Decimal, ParameterDirection.Output);
+        cmd.Parameters.Add(pNewId);
+
+        cmd.ExecuteNonQuery();
+        int newId = Convert.ToInt32(pNewId.Value.ToString());
+        return Results.Ok(new { success = true, authorID = newId });
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+});
+
+app.MapPut("/api/authors/{id:int}", async (int id, HttpContext ctx) =>
+{
+    using var reader = new StreamReader(ctx.Request.Body);
+    var json = await reader.ReadToEndAsync();
+    var doc = JsonDocument.Parse(json);
+    var root = doc.RootElement;
+
+    try
+    {
+        using var conn = new OracleConnection(ConnectionString);
+        conn.Open();
+        using var cmd = new OracleCommand("SP_AUTHOR_UPDATE", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.BindByName = true;
+
+        cmd.Parameters.Add("p_author_id", OracleDbType.Int32, id, ParameterDirection.Input);
+        cmd.Parameters.Add("p_author_name", OracleDbType.Varchar2, root.GetProperty("authorName").GetString(), ParameterDirection.Input);
+        cmd.Parameters.Add("p_gender", OracleDbType.Varchar2, root.TryGetProperty("gender", out var g) ? g.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_dob", OracleDbType.Date, root.TryGetProperty("dob", out var d) && DateTime.TryParse(d.GetString(), out var dt) ? dt : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_pob", OracleDbType.Varchar2, root.TryGetProperty("pob", out var p) ? p.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_address", OracleDbType.Varchar2, root.TryGetProperty("address", out var a) ? a.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_phone", OracleDbType.Varchar2, root.TryGetProperty("phone", out var ph) ? ph.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+        cmd.Parameters.Add("p_email", OracleDbType.Varchar2, root.TryGetProperty("email", out var em) ? em.GetString() : (object)DBNull.Value, ParameterDirection.Input);
+
+        byte[]? photoBytes = null;
+        if (root.TryGetProperty("photo", out var photoEl) && !string.IsNullOrEmpty(photoEl.GetString()))
+        {
+            photoBytes = Convert.FromBase64String(photoEl.GetString()!);
+        }
+        cmd.Parameters.Add("p_photo", OracleDbType.Blob, (object?)photoBytes ?? DBNull.Value, ParameterDirection.Input);
+
+        cmd.ExecuteNonQuery();
+        return Results.Ok(new { success = true });
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+});
+
+app.MapDelete("/api/authors/{id:int}", (int id) =>
+{
+    try
+    {
+        using var conn = new OracleConnection(ConnectionString);
+        conn.Open();
+        using var cmd = new OracleCommand("SP_AUTHOR_DELETE", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.BindByName = true;
+        cmd.Parameters.Add("p_author_id", OracleDbType.Int32, id, ParameterDirection.Input);
+        cmd.ExecuteNonQuery();
+        return Results.Ok(new { success = true });
     }
     catch (Exception ex)
     {

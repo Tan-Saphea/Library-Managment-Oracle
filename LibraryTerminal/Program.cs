@@ -247,7 +247,7 @@ namespace LibraryTerminal
                 cmd.Parameters.Add("p_Email", OracleDbType.Varchar2, string.IsNullOrEmpty(email) ? DBNull.Value : email, ParameterDirection.Input);
                 cmd.Parameters.Add("p_Photo", OracleDbType.Blob, DBNull.Value, ParameterDirection.Input);
 
-                var pNewId = new OracleParameter("p_new_stuid", OracleDbType.Int32, ParameterDirection.Output);
+                var pNewId = new OracleParameter("p_new_id", OracleDbType.Int32, ParameterDirection.Output);
                 cmd.Parameters.Add(pNewId);
 
                 cmd.ExecuteNonQuery();
@@ -390,7 +390,7 @@ namespace LibraryTerminal
                 cmd.Parameters.Add("p_BookSource", OracleDbType.Varchar2, "Library Purchase", ParameterDirection.Input);
                 cmd.Parameters.Add("p_Remark", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Input);
 
-                var pNewId = new OracleParameter("p_new_bookid", OracleDbType.Int32, ParameterDirection.Output);
+                var pNewId = new OracleParameter("p_new_id", OracleDbType.Int32, ParameterDirection.Output);
                 cmd.Parameters.Add(pNewId);
 
                 cmd.ExecuteNonQuery();
