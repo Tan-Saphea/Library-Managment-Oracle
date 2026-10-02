@@ -581,3 +581,20 @@ BEGIN
           AND u.UserPassword    = p_password;
 END;
 /
+
+-- 4.7 Select All Borrow Records (Dashboard Circulation Details)
+CREATE OR REPLACE PROCEDURE SP_BORROW_SELECT_ALL
+(
+    p_cursor OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT 
+            BorrowID, StuID, StuName, LibID, LibName, 
+            BorrowDate, BookID, BookTitle, QtyBorrow, IsReturned, ReturnDate, Remark
+        FROM VW_BORROW_DETAILS
+        ORDER BY BorrowID DESC;
+END;
+/
+

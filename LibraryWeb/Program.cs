@@ -454,4 +454,36 @@ app.MapGet("/api/authors/search", (string? q) =>
     }
 });
 
+// -------------------------------------------------------------
+// BORROWS & CIRCULATION (SP_BORROW_SELECT_ALL)
+// -------------------------------------------------------------
+app.MapGet("/api/borrows", () =>
+{
+    try
+    {
+        var dt = ExecuteRefCursor("SP_BORROW_SELECT_ALL");
+        var list = dt.AsEnumerable().Select(r => new
+        {
+            borrowID = Convert.ToInt32(r["BorrowID"]),
+            stuID = Convert.ToInt32(r["StuID"]),
+            stuName = r["StuName"]?.ToString(),
+            libID = Convert.ToInt32(r["LibID"]),
+            libName = r["LibName"]?.ToString(),
+            borrowDate = r["BorrowDate"] == DBNull.Value ? null : Convert.ToDateTime(r["BorrowDate"]).ToString("yyyy-MM-dd"),
+            bookID = Convert.ToInt32(r["BookID"]),
+            bookTitle = r["BookTitle"]?.ToString(),
+            qtyBorrow = Convert.ToInt32(r["QtyBorrow"]),
+            isReturned = Convert.ToInt32(r["IsReturned"]) == 1,
+            returnDate = r["ReturnDate"] == DBNull.Value ? null : Convert.ToDateTime(r["ReturnDate"]).ToString("yyyy-MM-dd"),
+            remark = r["Remark"]?.ToString()
+        });
+        return Results.Ok(list);
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+});
+
 app.Run();
+

@@ -433,23 +433,41 @@
 
         <!-- DASHBOARD VIEW -->
         <div id="viewDashboard" style="display: none;">
-          <div class="form-header">System Dashboard & Oracle Statistics</div>
+          <div class="form-header">System Dashboard</div>
           <div style="background: white; padding: 20px; border: 1px solid #dcdcdc; border-radius: 2px;">
-            <p><strong>Database Connection:</strong> Oracle Database 23ai Free (localhost:1521/FREEPDB1)</p>
-            <p style="margin-top: 8px;"><strong>Schema User:</strong> LIBRARY_USER</p>
-            <p style="margin-top: 8px;"><strong>Architecture:</strong> 100% Stored Procedures &amp; SYS_REFCURSOR binding</p>
-            <div style="display: flex; gap: 20px; margin-top: 20px;">
+            <div style="display: flex; gap: 20px;">
               <div style="background: #eef5fc; border: 1px solid #b8d7f2; padding: 15px; border-radius: 4px; flex: 1;">
-                <h4 style="color: #0078d7;">Active Students</h4>
+                <h4 style="color: #0078d7; margin: 0; font-size: 13px;">Active Students</h4>
                 <div id="dashStudentCount" style="font-size: 28px; font-weight: bold; margin-top: 8px;">--</div>
               </div>
               <div style="background: #fbf5ee; border: 1px solid #f2d9b8; padding: 15px; border-radius: 4px; flex: 1;">
-                <h4 style="color: #d97706;">Books in Catalog</h4>
+                <h4 style="color: #d97706; margin: 0; font-size: 13px;">Books in Catalog</h4>
                 <div id="dashBookCount" style="font-size: 28px; font-weight: bold; margin-top: 8px;">--</div>
               </div>
               <div style="background: #edfbf0; border: 1px solid #bdf2cc; padding: 15px; border-radius: 4px; flex: 1;">
-                <h4 style="color: #16a34a;">Registered Authors</h4>
+                <h4 style="color: #16a34a; margin: 0; font-size: 13px;">Registered Authors</h4>
                 <div id="dashAuthorCount" style="font-size: 28px; font-weight: bold; margin-top: 8px;">--</div>
+              </div>
+            </div>
+
+            <!-- Table Section below Stat Cards -->
+            <div style="margin-top: 22px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="font-size: 14px; font-weight: bold; color: #222;" id="dashTableTitle">Recent Borrow Transactions</div>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" class="std-btn" id="btnDashBorrows" style="font-size: 11px; height: 26px; min-width: auto; padding: 0 12px; background: #0078d7; color: white; border-color: #005a9e; font-weight: 600;" onclick="switchDashTable('borrows')">Borrow Records</button>
+                  <button type="button" class="std-btn" id="btnDashBooks" style="font-size: 11px; height: 26px; min-width: auto; padding: 0 12px;" onclick="switchDashTable('books')">Books Catalog</button>
+                  <button type="button" class="std-btn" id="btnDashStudents" style="font-size: 11px; height: 26px; min-width: auto; padding: 0 12px;" onclick="switchDashTable('students')">Students</button>
+                </div>
+              </div>
+
+              <div class="grid-container" style="max-height: 420px; min-height: 240px; border: 1px solid #adadad;">
+                <table class="dgv" id="tblDashboard">
+                  <thead id="theadDashboard"></thead>
+                  <tbody id="tbodyDashboard">
+                    <tr><td colspan="8" style="text-align: center; padding: 20px; color: #777;">Loading dashboard records...</td></tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -1275,21 +1293,152 @@
     // ==========================================
     // DASHBOARD
     // ==========================================
+    let dashData = {
+      students: [],
+      books: [],
+      authors: [],
+      borrows: []
+    };
+    let currentDashTab = 'borrows';
+
     async function loadDashboard() {
       try {
-        const [sRes, bRes, aRes] = await Promise.all([
+        const [sRes, bRes, aRes, borrowRes] = await Promise.all([
           fetch('/api/students'),
           fetch('/api/books'),
-          fetch('/api/authors')
+          fetch('/api/authors'),
+          fetch('/api/borrows')
         ]);
-        const s = await sRes.json();
-        const b = await bRes.json();
-        const a = await aRes.json();
-        document.getElementById('dashStudentCount').textContent = s.length;
-        document.getElementById('dashBookCount').textContent = b.length;
-        document.getElementById('dashAuthorCount').textContent = a.length;
+        dashData.students = await sRes.json();
+        dashData.books = await bRes.json();
+        dashData.authors = await aRes.json();
+        dashData.borrows = await borrowRes.json();
+
+        document.getElementById('dashStudentCount').textContent = dashData.students.length;
+        document.getElementById('dashBookCount').textContent = dashData.books.length;
+        document.getElementById('dashAuthorCount').textContent = dashData.authors.length;
+
+        renderDashTable();
       } catch (err) {
         console.error(err);
+      }
+    }
+
+    function switchDashTable(tab) {
+      currentDashTab = tab;
+      const tabs = ['borrows', 'books', 'students'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('btnDash' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (t === tab) {
+          btn.style.background = '#0078d7';
+          btn.style.color = 'white';
+          btn.style.borderColor = '#005a9e';
+          btn.style.fontWeight = '600';
+        } else {
+          btn.style.background = '#e1e1e1';
+          btn.style.color = '#111';
+          btn.style.borderColor = '#adadad';
+          btn.style.fontWeight = '500';
+        }
+      });
+      renderDashTable();
+    }
+
+    function renderDashTable() {
+      const thead = document.getElementById('theadDashboard');
+      const tbody = document.getElementById('tbodyDashboard');
+      const title = document.getElementById('dashTableTitle');
+
+      if (currentDashTab === 'borrows') {
+        title.textContent = 'Recent Borrow Transactions';
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 80px;">Borrow ID</th>
+            <th>Student Name</th>
+            <th>Book Title</th>
+            <th style="width: 110px;">Borrow Date</th>
+            <th style="width: 60px;">Qty</th>
+            <th style="width: 120px;">Status</th>
+            <th style="width: 110px;">Return Date</th>
+            <th>Issued By</th>
+          </tr>
+        `;
+        if (!dashData.borrows || dashData.borrows.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #777;">No borrow records found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = dashData.borrows.map(r => `
+          <tr>
+            <td style="font-weight: 600;">${r.borrowID}</td>
+            <td>${r.stuName || ''}</td>
+            <td>${r.bookTitle || ''}</td>
+            <td>${r.borrowDate || '-'}</td>
+            <td>${r.qtyBorrow}</td>
+            <td>
+              ${r.isReturned 
+                ? '<span style="background: #e6f4ea; color: #137333; font-weight: 600; padding: 2px 8px; border-radius: 3px; font-size: 11px;">Returned</span>'
+                : '<span style="background: #fce8e6; color: #c5221f; font-weight: 600; padding: 2px 8px; border-radius: 3px; font-size: 11px;">Active Borrow</span>'}
+            </td>
+            <td>${r.returnDate || '-'}</td>
+            <td>${r.libName || ''}</td>
+          </tr>
+        `).join('');
+      } else if (currentDashTab === 'books') {
+        title.textContent = 'Books in Catalog Overview';
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 70px;">Book ID</th>
+            <th>Title</th>
+            <th>Genre / Type</th>
+            <th>Publisher</th>
+            <th style="width: 70px;">Pages</th>
+            <th style="width: 70px;">Copies</th>
+            <th>Edition</th>
+          </tr>
+        `;
+        if (!dashData.books || dashData.books.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px; color: #777;">No books found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = dashData.books.map(b => `
+          <tr>
+            <td style="font-weight: 600;">${b.bookID}</td>
+            <td>${b.bookTitle || ''}</td>
+            <td>${b.bookTypeName || ''}</td>
+            <td>${b.publisher || ''}</td>
+            <td>${b.numOfPages || 0}</td>
+            <td style="font-weight: bold; color: ${b.numCopies > 0 ? '#137333' : '#c5221f'};">${b.numCopies}</td>
+            <td>${b.edition || ''}</td>
+          </tr>
+        `).join('');
+      } else if (currentDashTab === 'students') {
+        title.textContent = 'Active Students Directory';
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 70px;">Stu ID</th>
+            <th>Full Name</th>
+            <th style="width: 80px;">Gender</th>
+            <th style="width: 110px;">Date of Birth</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Place of Birth</th>
+          </tr>
+        `;
+        if (!dashData.students || dashData.students.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px; color: #777;">No students found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = dashData.students.map(s => `
+          <tr>
+            <td style="font-weight: 600;">${s.stuID}</td>
+            <td>${s.stuName || ''}</td>
+            <td>${s.gender || ''}</td>
+            <td>${s.dob || '-'}</td>
+            <td>${s.phone || '-'}</td>
+            <td>${s.email || '-'}</td>
+            <td>${s.pob || '-'}</td>
+          </tr>
+        `).join('');
       }
     }
 
