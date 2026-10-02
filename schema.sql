@@ -223,7 +223,7 @@ CREATE TABLE ReturnBook
     Remark          VARCHAR2(500),
 
     CONSTRAINT PK_ReturnBook
-        PRIMARY KEY (BorrowID, BookID),
+        PRIMARY KEY (BorrowID, BookID, LibID),
 
     CONSTRAINT FK_ReturnBook_Borrow
         FOREIGN KEY (BorrowID)

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Library Management System - Windows Forms Desktop</title>
+  <title>Library Management System - Oracle Database 23ai</title>
   <style>
     * {
       box-sizing: border-box;
@@ -23,8 +23,10 @@
 
     /* Windows Application Frame */
     .win-window {
-      width: 1100px;
-      height: 720px;
+      width: 1220px;
+      height: 780px;
+      max-width: 98vw;
+      max-height: 98vh;
       background: #f0f0f0;
       border: 1px solid #707070;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -101,20 +103,27 @@
       display: flex;
       flex-direction: column;
       padding: 10px;
-      gap: 6px;
+      gap: 4px;
+      overflow-y: auto;
     }
 
     .sidebar-header {
-      padding: 10px 5px;
+      padding: 6px 4px 4px 4px;
       font-weight: bold;
-      font-size: 14px;
-      color: #333;
+      font-size: 11px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       border-bottom: 1px solid #ccc;
-      margin-bottom: 8px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+    .sidebar-header:first-child {
+      margin-top: 0;
     }
 
     .sidebar-btn {
-      padding: 10px 14px;
+      padding: 8px 12px;
       background: #fdfdfd;
       border: 1px solid #bfbfbf;
       border-radius: 2px;
@@ -122,6 +131,7 @@
       font-weight: 500;
       cursor: pointer;
       color: #222;
+      font-size: 12px;
     }
     .sidebar-btn:hover {
       background: #e5f1fb;
@@ -150,50 +160,54 @@
       background: #f0f0f0;
       display: flex;
       flex-direction: column;
-      padding: 15px 20px;
+      padding: 14px 18px;
       overflow-y: auto;
     }
 
     .form-header {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       color: #003366;
       border-bottom: 2px solid #0078d7;
-      padding-bottom: 6px;
-      margin-bottom: 15px;
+      padding-bottom: 5px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     /* Form Fields Grid */
     .fields-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr) 140px;
-      gap: 12px;
+      gap: 10px;
       background: #ffffff;
-      padding: 15px;
+      padding: 12px 15px;
       border: 1px solid #dcdcdc;
       border-radius: 2px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
 
     .form-group label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: #444;
     }
 
     .win-input, .win-select {
-      height: 28px;
-      padding: 3px 8px;
+      height: 27px;
+      padding: 2px 8px;
       border: 1px solid #7a7a7a;
       background: #ffffff;
       border-radius: 2px;
       outline: none;
+      font-size: 12px;
     }
     .win-input:focus, .win-select:focus {
       border-color: #0078d7;
@@ -212,12 +226,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .photo-preview {
-      width: 120px;
-      height: 140px;
+      width: 110px;
+      height: 130px;
       border: 1px solid #a0a0a0;
       background: #eaeaea;
       display: flex;
@@ -237,19 +251,21 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
     }
 
     .std-btn {
-      min-width: 85px;
-      height: 30px;
-      padding: 0 14px;
+      min-width: 80px;
+      height: 28px;
+      padding: 0 12px;
       background: #e1e1e1;
       border: 1px solid #adadad;
       cursor: pointer;
       font-weight: 500;
       color: #111;
       border-radius: 2px;
+      font-size: 12px;
     }
     .std-btn:hover {
       background: #e5f1fb;
@@ -273,15 +289,16 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .search-panel label {
       font-weight: 600;
+      font-size: 12px;
     }
     .search-panel input {
       flex: 1;
       max-width: 450px;
-      height: 28px;
+      height: 27px;
     }
 
     /* WinForms DataGridView */
@@ -290,7 +307,7 @@
       background: #ffffff;
       border: 1px solid #a0a0a0;
       overflow: auto;
-      min-height: 220px;
+      min-height: 200px;
     }
 
     .dgv {
@@ -341,7 +358,7 @@
       gap: 20px;
     }
 
-    /* Modal Login Dialog */
+    /* Modal Dialog */
     .modal-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -362,25 +379,45 @@
     }
 
     .modal-body {
-      padding: 25px 30px;
+      padding: 22px 25px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
     }
 
     .modal-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       text-align: center;
       color: #003366;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .modal-footer {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      margin-top: 10px;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    /* Badges */
+    .badge-returned {
+      background: #e6f4ea;
+      color: #137333;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      display: inline-block;
+    }
+    .badge-active {
+      background: #fce8e6;
+      color: #c5221f;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      display: inline-block;
     }
 
     /* Toast Notification */
@@ -418,50 +455,71 @@
     <!-- Window Body -->
     <div class="win-body">
 
-      <!-- Left Sidebar -->
+      <!-- Left Sidebar Navigation -->
       <div class="win-sidebar">
-        <div class="sidebar-header">Main Menu</div>
+        <div class="sidebar-header">Main</div>
         <button class="sidebar-btn" id="navDashboard" onclick="showView('dashboard')">Dashboard</button>
-        <button class="sidebar-btn active" id="navStudents" onclick="showView('students')">Students</button>
-        <button class="sidebar-btn" id="navAuthors" onclick="showView('authors')">Authors</button>
+
+        <div class="sidebar-header">Circulation</div>
+        <button class="sidebar-btn" id="navBorrow" onclick="showView('borrow')">Borrow Books</button>
+        <button class="sidebar-btn" id="navReturn" onclick="showView('return')">Return Books</button>
+
+        <div class="sidebar-header">Catalog</div>
         <button class="sidebar-btn" id="navBooks" onclick="showView('books')">Books</button>
+        <button class="sidebar-btn" id="navAuthors" onclick="showView('authors')">Authors</button>
+
+        <div class="sidebar-header">Administration</div>
+        <button class="sidebar-btn active" id="navStudents" onclick="showView('students')">Students</button>
+        <button class="sidebar-btn" id="navLibrarians" onclick="showView('librarians')">Librarians</button>
+        <button class="sidebar-btn" id="navUsers" onclick="showView('users')">User Accounts</button>
+
         <button class="sidebar-btn exit-btn" onclick="showLoginModal()">Log Out</button>
       </div>
 
       <!-- Main Content Area -->
       <div class="win-content">
 
+        <!-- ========================================================= -->
         <!-- DASHBOARD VIEW -->
+        <!-- ========================================================= -->
         <div id="viewDashboard" style="display: none;">
-          <div class="form-header">System Dashboard</div>
-          <div style="background: white; padding: 20px; border: 1px solid #dcdcdc; border-radius: 2px;">
-            <div style="display: flex; gap: 20px;">
-              <div style="background: #eef5fc; border: 1px solid #b8d7f2; padding: 15px; border-radius: 4px; flex: 1;">
-                <h4 style="color: #0078d7; margin: 0; font-size: 13px;">Active Students</h4>
-                <div id="dashStudentCount" style="font-size: 28px; font-weight: bold; margin-top: 8px;">--</div>
+          <div class="form-header">
+            <span>System Dashboard</span>
+            <span style="font-size: 11px; font-weight: normal; color: #555;">Oracle Stored Procedures Binding</span>
+          </div>
+          <div style="background: white; padding: 18px; border: 1px solid #dcdcdc; border-radius: 2px;">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+              <div style="background: #eef5fc; border: 1px solid #b8d7f2; padding: 12px; border-radius: 4px;">
+                <h4 style="color: #0078d7; margin: 0; font-size: 12px;">Active Students</h4>
+                <div id="dashStudentCount" style="font-size: 26px; font-weight: bold; margin-top: 6px;">--</div>
               </div>
-              <div style="background: #fbf5ee; border: 1px solid #f2d9b8; padding: 15px; border-radius: 4px; flex: 1;">
-                <h4 style="color: #d97706; margin: 0; font-size: 13px;">Books in Catalog</h4>
-                <div id="dashBookCount" style="font-size: 28px; font-weight: bold; margin-top: 8px;">--</div>
+              <div style="background: #fbf5ee; border: 1px solid #f2d9b8; padding: 12px; border-radius: 4px;">
+                <h4 style="color: #d97706; margin: 0; font-size: 12px;">Books in Catalog</h4>
+                <div id="dashBookCount" style="font-size: 26px; font-weight: bold; margin-top: 6px;">--</div>
               </div>
-              <div style="background: #edfbf0; border: 1px solid #bdf2cc; padding: 15px; border-radius: 4px; flex: 1;">
-                <h4 style="color: #16a34a; margin: 0; font-size: 13px;">Registered Authors</h4>
-                <div id="dashAuthorCount" style="font-size: 28px; font-weight: bold; margin-top: 8px;">--</div>
+              <div style="background: #edfbf0; border: 1px solid #bdf2cc; padding: 12px; border-radius: 4px;">
+                <h4 style="color: #16a34a; margin: 0; font-size: 12px;">Registered Authors</h4>
+                <div id="dashAuthorCount" style="font-size: 26px; font-weight: bold; margin-top: 6px;">--</div>
+              </div>
+              <div style="background: #fbf0f7; border: 1px solid #f2bde5; padding: 12px; border-radius: 4px;">
+                <h4 style="color: #9333ea; margin: 0; font-size: 12px;">Active Loans</h4>
+                <div id="dashBorrowCount" style="font-size: 26px; font-weight: bold; margin-top: 6px;">--</div>
               </div>
             </div>
 
             <!-- Table Section below Stat Cards -->
-            <div style="margin-top: 22px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <div style="font-size: 14px; font-weight: bold; color: #222;" id="dashTableTitle">Recent Borrow Transactions</div>
+            <div style="margin-top: 18px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="font-size: 13px; font-weight: bold; color: #222;" id="dashTableTitle">Recent Borrow Transactions</div>
                 <div style="display: flex; gap: 6px;">
                   <button type="button" class="std-btn" id="btnDashBorrows" style="font-size: 11px; height: 26px; min-width: auto; padding: 0 12px; background: #0078d7; color: white; border-color: #005a9e; font-weight: 600;" onclick="switchDashTable('borrows')">Borrow Records</button>
                   <button type="button" class="std-btn" id="btnDashBooks" style="font-size: 11px; height: 26px; min-width: auto; padding: 0 12px;" onclick="switchDashTable('books')">Books Catalog</button>
                   <button type="button" class="std-btn" id="btnDashStudents" style="font-size: 11px; height: 26px; min-width: auto; padding: 0 12px;" onclick="switchDashTable('students')">Students</button>
+                  <button type="button" class="std-btn" id="btnDashLibrarians" style="font-size: 11px; height: 26px; min-width: auto; padding: 0 12px;" onclick="switchDashTable('librarians')">Librarians</button>
                 </div>
               </div>
 
-              <div class="grid-container" style="max-height: 420px; min-height: 240px; border: 1px solid #adadad;">
+              <div class="grid-container" style="max-height: 400px; min-height: 240px; border: 1px solid #adadad;">
                 <table class="dgv" id="tblDashboard">
                   <thead id="theadDashboard"></thead>
                   <tbody id="tbodyDashboard">
@@ -473,9 +531,345 @@
           </div>
         </div>
 
-        <!-- STUDENTS VIEW -->
+        <!-- ========================================================= -->
+        <!-- BORROW BOOKS VIEW (Borrow & BorrowBook) -->
+        <!-- ========================================================= -->
+        <div id="viewBorrow" style="display: none;">
+          <div class="form-header">
+            <span>CIRCULATION - BORROW BOOKS (SP_BORROW_INSERT, SP_BORROWBOOK_INSERT)</span>
+          </div>
+          
+          <div class="fields-container" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="form-group">
+              <label>Select Student *:</label>
+              <select id="cboBorrowStudent" class="win-select"></select>
+            </div>
+            <div class="form-group">
+              <label>Select Book *:</label>
+              <select id="cboBorrowBook" class="win-select" onchange="onBorrowBookChange()"></select>
+            </div>
+            <div class="form-group">
+              <label>Issued By Librarian *:</label>
+              <select id="cboBorrowLibrarian" class="win-select"></select>
+            </div>
+            <div class="form-group">
+              <label>Quantity to Borrow *:</label>
+              <input type="number" id="nudBorrowQty" class="win-input" value="1" min="1">
+            </div>
+            <div class="form-group">
+              <label>Borrow Date:</label>
+              <input type="date" id="dtpBorrowDate" class="win-input">
+            </div>
+            <div class="form-group">
+              <label>Available Stock Copies:</label>
+              <input type="text" id="txtBorrowStock" class="win-input" readonly placeholder="Select a book...">
+            </div>
+            <div class="form-group" style="grid-column: 1 / span 3;">
+              <label>Remark / Notes:</label>
+              <input type="text" id="txtBorrowRemark" class="win-input" placeholder="e.g. Loan for thesis research">
+            </div>
+          </div>
+
+          <div class="button-bar">
+            <button class="std-btn btn-save" onclick="issueBorrowLoan()">Issue Borrow Loan</button>
+            <button class="std-btn" onclick="clearBorrowForm()">Clear</button>
+            <button class="std-btn" onclick="loadBorrows()">Refresh Grid</button>
+          </div>
+
+          <div class="grid-container">
+            <table class="dgv" id="dgvBorrows">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">Borrow ID</th>
+                  <th>Student Name</th>
+                  <th>Book Title</th>
+                  <th style="width: 100px;">Borrow Date</th>
+                  <th style="width: 60px;">Qty</th>
+                  <th style="width: 110px;">Status</th>
+                  <th style="width: 100px;">Return Date</th>
+                  <th>Issued By</th>
+                  <th style="width: 80px;">Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- RETURN BOOKS VIEW (Return & ReturnBook) -->
+        <!-- ========================================================= -->
+        <div id="viewReturn" style="display: none;">
+          <div class="form-header">
+            <span>CIRCULATION - RETURN BOOKS (SP_RETURN_BOOK, SP_RETURN_SELECT_ALL)</span>
+          </div>
+
+          <div class="fields-container" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="form-group" style="grid-column: 1 / span 2;">
+              <label>Select Active Borrow Loan *:</label>
+              <select id="cboReturnBorrow" class="win-select" onchange="onReturnBorrowChange()"></select>
+            </div>
+            <div class="form-group">
+              <label>Receiving Librarian *:</label>
+              <select id="cboReturnLibrarian" class="win-select"></select>
+            </div>
+            <div class="form-group">
+              <label>Student Name:</label>
+              <input type="text" id="txtReturnStudentName" class="win-input" readonly>
+            </div>
+            <div class="form-group">
+              <label>Book Title:</label>
+              <input type="text" id="txtReturnBookTitle" class="win-input" readonly>
+            </div>
+            <div class="form-group">
+              <label>Quantity to Return *:</label>
+              <input type="number" id="nudReturnQty" class="win-input" value="1" min="1">
+            </div>
+            <div class="form-group">
+              <label>Return Date:</label>
+              <input type="date" id="dtpReturnDate" class="win-input">
+            </div>
+            <div class="form-group" style="grid-column: 2 / span 2;">
+              <label>Return Condition / Remark:</label>
+              <input type="text" id="txtReturnRemark" class="win-input" value="Returned on time, good condition">
+            </div>
+          </div>
+
+          <div class="button-bar">
+            <button class="std-btn btn-save" onclick="processReturn()">Process Book Return</button>
+            <button class="std-btn" onclick="clearReturnForm()">Clear</button>
+            <button class="std-btn" onclick="loadReturns()">Refresh History</button>
+          </div>
+
+          <div class="grid-container">
+            <table class="dgv" id="dgvReturns">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">Return ID</th>
+                  <th style="width: 70px;">Borrow ID</th>
+                  <th>Student Name</th>
+                  <th>Book Title</th>
+                  <th style="width: 60px;">Qty</th>
+                  <th style="width: 100px;">Return Date</th>
+                  <th>Received By (Librarian)</th>
+                  <th>Remark</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- BOOKS VIEW (Book, BookType, BookAuthor) -->
+        <!-- ========================================================= -->
+        <div id="viewBooks" style="display: none;">
+          <div class="form-header">
+            <span>BOOK MANAGEMENT (SP_BOOK_*, SP_BOOKTYPE_*, SP_BOOKAUTHOR_*)</span>
+          </div>
+          
+          <div class="fields-container" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="form-group">
+              <label>Book ID:</label>
+              <input type="text" id="txtBookID" class="win-input" readonly placeholder="(Auto ID)">
+            </div>
+            <div class="form-group" style="grid-column: 2 / span 2;">
+              <label>Book Title *:</label>
+              <input type="text" id="txtBookTitle" class="win-input" placeholder="e.g. Clean Code">
+            </div>
+            <div class="form-group">
+              <label style="display: flex; justify-content: space-between;">
+                <span>Category (BookType) *:</span>
+                <a href="javascript:void(0)" onclick="promptNewBookType()" style="color: #0078d7; text-decoration: none;">+ New</a>
+              </label>
+              <select id="cboBookType" class="win-select"></select>
+            </div>
+            <div class="form-group">
+              <label>Publish Date:</label>
+              <input type="date" id="dtpPublishDate" class="win-input">
+            </div>
+            <div class="form-group">
+              <label>No. of Pages:</label>
+              <input type="number" id="nudNumOfPages" class="win-input" value="350" min="0">
+            </div>
+            <div class="form-group">
+              <label>No. of Copies (Stock):</label>
+              <input type="number" id="nudNumCopies" class="win-input" value="5" min="0">
+            </div>
+            <div class="form-group">
+              <label>Edition:</label>
+              <input type="text" id="txtEdition" class="win-input" placeholder="1st Edition">
+            </div>
+            <div class="form-group">
+              <label>Publisher:</label>
+              <input type="text" id="txtPublisher" class="win-input" placeholder="Prentice Hall">
+            </div>
+            <div class="form-group">
+              <label>Book Source:</label>
+              <input type="text" id="txtBookSource" class="win-input" placeholder="Library Purchase">
+            </div>
+            <div class="form-group" style="grid-column: 2 / span 2;">
+              <label>Remark:</label>
+              <input type="text" id="txtRemark" class="win-input">
+            </div>
+          </div>
+
+          <div class="button-bar">
+            <button class="std-btn" onclick="newBook()">New</button>
+            <button class="std-btn btn-save" onclick="saveBook()">Save</button>
+            <button class="std-btn" onclick="updateBook()">Update</button>
+            <button class="std-btn" onclick="deleteBook()">Delete</button>
+            <button class="std-btn" onclick="clearBookForm()">Clear</button>
+          </div>
+
+          <!-- BOOKAUTHOR Sub-Panel for Selected Book -->
+          <div style="background: #ffffff; border: 1px solid #dcdcdc; border-radius: 2px; padding: 10px; margin-bottom: 10px;">
+            <div style="font-weight: 600; font-size: 12px; color: #003366; margin-bottom: 6px; display: flex; justify-content: space-between;">
+              <span>Associated Authors (BookAuthor Table - Many to Many)</span>
+              <span id="lblBookAuthorContext" style="color: #666; font-weight: normal;">Select a book above to view authors</span>
+            </div>
+            
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <select id="cboAssignAuthor" class="win-select" style="width: 250px;"></select>
+              <input type="text" id="txtAssignAuthorRemark" class="win-input" style="flex: 1;" placeholder="Remark (e.g. Lead Author, Editor)">
+              <button class="std-btn" onclick="addAuthorToBook()">Link Author</button>
+            </div>
+
+            <div style="max-height: 100px; overflow-y: auto; border: 1px solid #e0e0e0;">
+              <table class="dgv" id="tblBookAuthors">
+                <thead>
+                  <tr>
+                    <th style="width: 60px;">Author ID</th>
+                    <th>Author Name</th>
+                    <th style="width: 100px;">Assigned Date</th>
+                    <th>Remark</th>
+                    <th style="width: 70px;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyBookAuthors">
+                  <tr><td colspan="5" style="text-align: center; color: #888;">Select a book to display linked authors.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="search-panel">
+            <label>Search:</label>
+            <input type="text" id="txtBookSearch" class="win-input" placeholder="Search by title, publisher, or genre..." oninput="searchBooks(this.value)">
+          </div>
+
+          <div class="grid-container">
+            <table class="dgv" id="dgvBooks">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Pages</th>
+                  <th>Copies</th>
+                  <th>Edition</th>
+                  <th>Publisher</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- AUTHORS VIEW (Author) -->
+        <!-- ========================================================= -->
+        <div id="viewAuthors" style="display: none;">
+          <div class="form-header">
+            <span>AUTHOR MANAGEMENT (SP_AUTHOR_*)</span>
+          </div>
+          
+          <div class="fields-container">
+            <div class="form-group">
+              <label>Author ID:</label>
+              <input type="text" id="txtAuthorID" class="win-input" readonly placeholder="(Auto ID)">
+            </div>
+            <div class="form-group">
+              <label>Author Name *:</label>
+              <input type="text" id="txtAuthorName" class="win-input" placeholder="e.g. Robert C. Martin">
+            </div>
+            <div class="form-group">
+              <label>Gender:</label>
+              <select id="cboAuthorGender" class="win-select">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Date of Birth:</label>
+              <input type="date" id="dtpAuthorDOB" class="win-input">
+            </div>
+            <div class="form-group">
+              <label>Place of Birth (POB):</label>
+              <input type="text" id="txtAuthorPOB" class="win-input" placeholder="Province / Country">
+            </div>
+            <div class="form-group">
+              <label>Phone Number:</label>
+              <input type="text" id="txtAuthorPhone" class="win-input" placeholder="012-345-678">
+            </div>
+            <div class="form-group" style="grid-column: 1 / span 2;">
+              <label>Address:</label>
+              <input type="text" id="txtAuthorAddress" class="win-input">
+            </div>
+            <div class="form-group" style="grid-column: 1 / span 2;">
+              <label>Email Address:</label>
+              <input type="email" id="txtAuthorEmail" class="win-input">
+            </div>
+
+            <!-- Photo Upload -->
+            <div class="photo-panel">
+              <div class="photo-preview" id="authorPhotoBox">
+                <span style="color: #888; font-size: 11px;">No Photo</span>
+              </div>
+              <input type="file" id="fileAuthorPhoto" accept="image/*" style="display: none;" onchange="handlePhotoSelect(this, 'authorPhotoBox', 'author')">
+              <button class="std-btn" onclick="document.getElementById('fileAuthorPhoto').click()">Browse...</button>
+            </div>
+          </div>
+
+          <div class="button-bar">
+            <button class="std-btn" onclick="newAuthor()">New</button>
+            <button class="std-btn btn-save" onclick="saveAuthor()">Save</button>
+            <button class="std-btn" onclick="updateAuthor()">Update</button>
+            <button class="std-btn" onclick="deleteAuthor()">Delete</button>
+            <button class="std-btn" onclick="clearAuthorForm()">Clear</button>
+          </div>
+
+          <div class="search-panel">
+            <label>Search:</label>
+            <input type="text" id="txtAuthorSearch" class="win-input" placeholder="Search by author name, email, or phone..." oninput="searchAuthors(this.value)">
+          </div>
+
+          <div class="grid-container">
+            <table class="dgv" id="dgvAuthors">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Author Name</th>
+                  <th>Gender</th>
+                  <th>DOB</th>
+                  <th>POB</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- STUDENTS VIEW (Student) -->
+        <!-- ========================================================= -->
         <div id="viewStudents">
-          <div class="form-header">STUDENT MANAGEMENT (SP_STUDENT_*)</div>
+          <div class="form-header">
+            <span>STUDENT MANAGEMENT (SP_STUDENT_*)</span>
+          </div>
           
           <div class="fields-container">
             <div class="form-group">
@@ -520,12 +914,11 @@
               <div class="photo-preview" id="stuPhotoBox">
                 <span style="color: #888; font-size: 11px;">No Photo</span>
               </div>
-              <input type="file" id="fileStuPhoto" accept="image/*" style="display: none;" onchange="handlePhotoSelect(this, 'stuPhotoBox')">
+              <input type="file" id="fileStuPhoto" accept="image/*" style="display: none;" onchange="handlePhotoSelect(this, 'stuPhotoBox', 'student')">
               <button class="std-btn" onclick="document.getElementById('fileStuPhoto').click()">Browse...</button>
             </div>
           </div>
 
-          <!-- Action Buttons -->
           <div class="button-bar">
             <button class="std-btn" onclick="newStudent()">New</button>
             <button class="std-btn btn-save" onclick="saveStudent()">Save</button>
@@ -534,13 +927,11 @@
             <button class="std-btn" onclick="clearStudentForm()">Clear</button>
           </div>
 
-          <!-- Search Bar -->
           <div class="search-panel">
             <label>Search:</label>
             <input type="text" id="txtStuSearch" class="win-input" placeholder="Search by student name, phone, or email..." oninput="searchStudents(this.value)">
           </div>
 
-          <!-- DataGridView -->
           <div class="grid-container">
             <table class="dgv" id="dgvStudents">
               <thead>
@@ -559,22 +950,26 @@
           </div>
         </div>
 
-        <!-- AUTHORS VIEW -->
-        <div id="viewAuthors" style="display: none;">
-          <div class="form-header">AUTHOR MANAGEMENT (SP_AUTHOR_*)</div>
+        <!-- ========================================================= -->
+        <!-- LIBRARIANS VIEW (Librarian) -->
+        <!-- ========================================================= -->
+        <div id="viewLibrarians" style="display: none;">
+          <div class="form-header">
+            <span>LIBRARIAN STAFF MANAGEMENT (SP_LIBRARIAN_*)</span>
+          </div>
           
           <div class="fields-container">
             <div class="form-group">
-              <label>Author ID:</label>
-              <input type="text" id="txtAuthorID" class="win-input" readonly placeholder="(Auto ID)">
+              <label>Librarian ID:</label>
+              <input type="text" id="txtLibID" class="win-input" readonly placeholder="(Auto ID)">
             </div>
             <div class="form-group">
-              <label>Author Name *:</label>
-              <input type="text" id="txtAuthorName" class="win-input" placeholder="e.g. Robert C. Martin">
+              <label>Full Name *:</label>
+              <input type="text" id="txtLibName" class="win-input" placeholder="e.g. Sarah Connor">
             </div>
             <div class="form-group">
               <label>Gender:</label>
-              <select id="cboAuthorGender" class="win-select">
+              <select id="cboLibGender" class="win-select">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -582,54 +977,49 @@
             </div>
             <div class="form-group">
               <label>Date of Birth:</label>
-              <input type="date" id="dtpAuthorDOB" class="win-input">
+              <input type="date" id="dtpLibDOB" class="win-input">
             </div>
             <div class="form-group">
               <label>Place of Birth (POB):</label>
-              <input type="text" id="txtAuthorPOB" class="win-input">
+              <input type="text" id="txtLibPOB" class="win-input" placeholder="Province / City">
             </div>
             <div class="form-group">
               <label>Phone Number:</label>
-              <input type="text" id="txtAuthorPhone" class="win-input">
+              <input type="text" id="txtLibPhone" class="win-input" placeholder="012-777-888">
             </div>
             <div class="form-group" style="grid-column: 1 / span 2;">
               <label>Address:</label>
-              <input type="text" id="txtAuthorAddress" class="win-input">
+              <input type="text" id="txtLibAddress" class="win-input" placeholder="Office / Room location">
             </div>
             <div class="form-group" style="grid-column: 1 / span 2;">
               <label>Email Address:</label>
-              <input type="email" id="txtAuthorEmail" class="win-input">
+              <input type="email" id="txtLibEmail" class="win-input" placeholder="librarian@library.edu">
             </div>
 
             <!-- Photo Upload -->
             <div class="photo-panel">
-              <div class="photo-preview" id="authorPhotoBox">
+              <div class="photo-preview" id="libPhotoBox">
                 <span style="color: #888; font-size: 11px;">No Photo</span>
               </div>
-              <input type="file" id="fileAuthorPhoto" accept="image/*" style="display: none;" onchange="handlePhotoSelect(this, 'authorPhotoBox')">
-              <button class="std-btn" onclick="document.getElementById('fileAuthorPhoto').click()">Browse...</button>
+              <input type="file" id="fileLibPhoto" accept="image/*" style="display: none;" onchange="handlePhotoSelect(this, 'libPhotoBox', 'librarian')">
+              <button class="std-btn" onclick="document.getElementById('fileLibPhoto').click()">Browse...</button>
             </div>
           </div>
 
           <div class="button-bar">
-            <button class="std-btn" onclick="newAuthor()">New</button>
-            <button class="std-btn btn-save" onclick="saveAuthor()">Save</button>
-            <button class="std-btn" onclick="updateAuthor()">Update</button>
-            <button class="std-btn" onclick="deleteAuthor()">Delete</button>
-            <button class="std-btn" onclick="clearAuthorForm()">Clear</button>
-          </div>
-
-          <div class="search-panel">
-            <label>Search:</label>
-            <input type="text" id="txtAuthorSearch" class="win-input" placeholder="Search by author name, email, or phone..." oninput="searchAuthors(this.value)">
+            <button class="std-btn" onclick="newLibrarian()">New</button>
+            <button class="std-btn btn-save" onclick="saveLibrarian()">Save</button>
+            <button class="std-btn" onclick="updateLibrarian()">Update</button>
+            <button class="std-btn" onclick="deleteLibrarian()">Delete</button>
+            <button class="std-btn" onclick="clearLibrarianForm()">Clear</button>
           </div>
 
           <div class="grid-container">
-            <table class="dgv" id="dgvAuthors">
+            <table class="dgv" id="dgvLibrarians">
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Author Name</th>
+                  <th>Librarian Name</th>
                   <th>Gender</th>
                   <th>DOB</th>
                   <th>POB</th>
@@ -642,77 +1032,52 @@
           </div>
         </div>
 
-        <!-- BOOKS VIEW -->
-        <div id="viewBooks" style="display: none;">
-          <div class="form-header">BOOK MANAGEMENT (SP_BOOK_*)</div>
-          
-          <div class="fields-container" style="grid-template-columns: repeat(3, 1fr);">
+        <!-- ========================================================= -->
+        <!-- USER ACCOUNTS VIEW (User / AppUser) -->
+        <!-- ========================================================= -->
+        <div id="viewUsers" style="display: none;">
+          <div class="form-header">
+            <span>USER LOGIN ACCOUNTS (SP_USER_*, 1-to-1 with Librarian)</span>
+          </div>
+
+          <div class="fields-container" style="grid-template-columns: repeat(2, 1fr);">
             <div class="form-group">
-              <label>Book ID:</label>
-              <input type="text" id="txtBookID" class="win-input" readonly placeholder="(Auto ID)">
-            </div>
-            <div class="form-group" style="grid-column: 2 / span 2;">
-              <label>Book Title *:</label>
-              <input type="text" id="txtBookTitle" class="win-input" placeholder="e.g. Clean Code">
-            </div>
-            <div class="form-group">
-              <label>Category (Book Type) *:</label>
-              <select id="cboBookType" class="win-select"></select>
+              <label>Staff Member (Librarian) *:</label>
+              <select id="cboUserLibID" class="win-select" onchange="onUserLibSelect()"></select>
             </div>
             <div class="form-group">
-              <label>Publish Date:</label>
-              <input type="date" id="dtpPublishDate" class="win-input">
+              <label>Username *:</label>
+              <input type="text" id="txtUserUsername" class="win-input" placeholder="e.g. sarah">
             </div>
             <div class="form-group">
-              <label>No. of Pages:</label>
-              <input type="number" id="nudNumOfPages" class="win-input" value="350" min="0">
+              <label>User Password *:</label>
+              <input type="password" id="txtUserPassword" class="win-input" placeholder="Enter password">
             </div>
             <div class="form-group">
-              <label>No. of Copies:</label>
-              <input type="number" id="nudNumCopies" class="win-input" value="5" min="0">
-            </div>
-            <div class="form-group">
-              <label>Edition:</label>
-              <input type="text" id="txtEdition" class="win-input" placeholder="1st Edition">
-            </div>
-            <div class="form-group">
-              <label>Publisher:</label>
-              <input type="text" id="txtPublisher" class="win-input" placeholder="Prentice Hall">
-            </div>
-            <div class="form-group">
-              <label>Book Source:</label>
-              <input type="text" id="txtBookSource" class="win-input" placeholder="Library Purchase">
-            </div>
-            <div class="form-group" style="grid-column: 2 / span 2;">
-              <label>Remark:</label>
-              <input type="text" id="txtRemark" class="win-input">
+              <label>User Role / Type *:</label>
+              <select id="cboUserType" class="win-select">
+                <option value="Librarian">Librarian</option>
+                <option value="Admin">Admin</option>
+                <option value="Staff">Staff</option>
+              </select>
             </div>
           </div>
 
           <div class="button-bar">
-            <button class="std-btn" onclick="newBook()">New</button>
-            <button class="std-btn btn-save" onclick="saveBook()">Save</button>
-            <button class="std-btn" onclick="updateBook()">Update</button>
-            <button class="std-btn" onclick="deleteBook()">Delete</button>
-            <button class="std-btn" onclick="clearBookForm()">Clear</button>
-          </div>
-
-          <div class="search-panel">
-            <label>Search:</label>
-            <input type="text" id="txtBookSearch" class="win-input" placeholder="Search by title, publisher, or genre..." oninput="searchBooks(this.value)">
+            <button class="std-btn btn-save" onclick="saveUserAccount()">Save User Account</button>
+            <button class="std-btn" onclick="clearUserForm()">Clear</button>
+            <button class="std-btn" onclick="loadUsers()">Refresh</button>
           </div>
 
           <div class="grid-container">
-            <table class="dgv" id="dgvBooks">
+            <table class="dgv" id="dgvUsers">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Title</th>
-                  <th>Category</th>
-                  <th>Pages</th>
-                  <th>Copies</th>
-                  <th>Edition</th>
-                  <th>Publisher</th>
+                  <th style="width: 70px;">LibID</th>
+                  <th>Username</th>
+                  <th>Staff Full Name</th>
+                  <th>Role (UserType)</th>
+                  <th>Email</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -727,7 +1092,7 @@
     <div class="win-statusbar">
       <span>Ready</span>
       <span id="lblConnectedUser">User: admin (Administrator)</span>
-      <span>Oracle DB: localhost:1521/FREEPDB1</span>
+      <span>Oracle DB: localhost:1521/FREEPDB1 (100% Stored Procedures)</span>
     </div>
 
     <!-- Modal Login Dialog -->
@@ -763,7 +1128,12 @@
   <div class="toast" id="toastBox">Message here</div>
 
   <script>
-    let currentPhotoBase64 = null;
+    // State storage for photos
+    let stuPhotoBase64 = null;
+    let authorPhotoBase64 = null;
+    let libPhotoBase64 = null;
+
+    let selectedBookID = null;
 
     // Toast helper
     function showToast(msg) {
@@ -774,31 +1144,41 @@
     }
 
     // View Switching
+    const allViews = ['Dashboard', 'Borrow', 'Return', 'Books', 'Authors', 'Students', 'Librarians', 'Users'];
+
     function showView(viewName) {
-      ['Dashboard', 'Students', 'Authors', 'Books'].forEach(v => {
+      allViews.forEach(v => {
         const el = document.getElementById('view' + v);
         const btn = document.getElementById('nav' + v);
-        if (v.toLowerCase() === viewName) {
+        if (v.toLowerCase() === viewName.toLowerCase()) {
           el.style.display = 'block';
-          btn.classList.add('active');
+          if (btn) btn.classList.add('active');
         } else {
           el.style.display = 'none';
-          btn.classList.remove('active');
+          if (btn) btn.classList.remove('active');
         }
       });
-      if (viewName === 'dashboard') loadDashboard();
-      if (viewName === 'students') loadStudents();
-      if (viewName === 'authors') loadAuthors();
-      if (viewName === 'books') loadBooks();
+
+      const vLower = viewName.toLowerCase();
+      if (vLower === 'dashboard') loadDashboard();
+      if (vLower === 'borrow') loadBorrowView();
+      if (vLower === 'return') loadReturnView();
+      if (vLower === 'books') loadBooks();
+      if (vLower === 'authors') loadAuthors();
+      if (vLower === 'students') loadStudents();
+      if (vLower === 'librarians') loadLibrarians();
+      if (vLower === 'users') loadUsers();
     }
 
     // Photo selection to Base64
-    function handlePhotoSelect(input, targetBoxId) {
+    function handlePhotoSelect(input, targetBoxId, entity) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
           const base64 = e.target.result.split(',')[1];
-          currentPhotoBase64 = base64;
+          if (entity === 'student') stuPhotoBase64 = base64;
+          if (entity === 'author') authorPhotoBase64 = base64;
+          if (entity === 'librarian') libPhotoBase64 = base64;
           document.getElementById(targetBoxId).innerHTML = `<img src="data:image/jpeg;base64,${base64}" />`;
         };
         reader.readAsDataURL(input.files[0]);
@@ -837,7 +1217,7 @@
     }
 
     // ==========================================
-    // STUDENTS CRUD
+    // 1. STUDENTS CRUD
     // ==========================================
     let studentsCache = [];
 
@@ -885,10 +1265,10 @@
 
       const photoBox = document.getElementById('stuPhotoBox');
       if (s.photo) {
-        currentPhotoBase64 = s.photo;
+        stuPhotoBase64 = s.photo;
         photoBox.innerHTML = `<img src="data:image/jpeg;base64,${s.photo}" />`;
       } else {
-        currentPhotoBase64 = null;
+        stuPhotoBase64 = null;
         photoBox.innerHTML = `<span style="color: #888; font-size: 11px;">No Photo</span>`;
       }
     }
@@ -908,7 +1288,7 @@
       document.getElementById('txtStuAddress').value = '';
       document.getElementById('txtStuEmail').value = '';
       document.getElementById('stuPhotoBox').innerHTML = `<span style="color: #888; font-size: 11px;">No Photo</span>`;
-      currentPhotoBase64 = null;
+      stuPhotoBase64 = null;
       document.querySelectorAll('#dgvStudents tr').forEach(r => r.classList.remove('selected'));
     }
 
@@ -924,7 +1304,7 @@
         address: document.getElementById('txtStuAddress').value.trim() || null,
         phone: document.getElementById('txtStuPhone').value.trim() || null,
         email: document.getElementById('txtStuEmail').value.trim() || null,
-        photo: currentPhotoBase64
+        photo: stuPhotoBase64
       };
 
       try {
@@ -961,7 +1341,7 @@
         address: document.getElementById('txtStuAddress').value.trim() || null,
         phone: document.getElementById('txtStuPhone').value.trim() || null,
         email: document.getElementById('txtStuEmail').value.trim() || null,
-        photo: currentPhotoBase64
+        photo: stuPhotoBase64
       };
 
       try {
@@ -1015,7 +1395,7 @@
     }
 
     // ==========================================
-    // AUTHORS CRUD
+    // 2. AUTHORS CRUD
     // ==========================================
     let authorsCache = [];
 
@@ -1063,10 +1443,10 @@
 
       const photoBox = document.getElementById('authorPhotoBox');
       if (a.photo) {
-        currentPhotoBase64 = a.photo;
+        authorPhotoBase64 = a.photo;
         photoBox.innerHTML = `<img src="data:image/jpeg;base64,${a.photo}" />`;
       } else {
-        currentPhotoBase64 = null;
+        authorPhotoBase64 = null;
         photoBox.innerHTML = `<span style="color: #888; font-size: 11px;">No Photo</span>`;
       }
     }
@@ -1086,7 +1466,7 @@
       document.getElementById('txtAuthorAddress').value = '';
       document.getElementById('txtAuthorEmail').value = '';
       document.getElementById('authorPhotoBox').innerHTML = `<span style="color: #888; font-size: 11px;">No Photo</span>`;
-      currentPhotoBase64 = null;
+      authorPhotoBase64 = null;
       document.querySelectorAll('#dgvAuthors tr').forEach(r => r.classList.remove('selected'));
     }
 
@@ -1113,7 +1493,7 @@
         address: document.getElementById('txtAuthorAddress').value.trim() || null,
         phone: document.getElementById('txtAuthorPhone').value.trim() || null,
         email: document.getElementById('txtAuthorEmail').value.trim() || null,
-        photo: currentPhotoBase64
+        photo: authorPhotoBase64
       };
 
       try {
@@ -1150,7 +1530,7 @@
         address: document.getElementById('txtAuthorAddress').value.trim() || null,
         phone: document.getElementById('txtAuthorPhone').value.trim() || null,
         email: document.getElementById('txtAuthorEmail').value.trim() || null,
-        photo: currentPhotoBase64
+        photo: authorPhotoBase64
       };
 
       try {
@@ -1193,7 +1573,7 @@
     }
 
     // ==========================================
-    // BOOKS CRUD
+    // 3. BOOKS CRUD & BOOKAUTHOR & BOOKTYPE
     // ==========================================
     let booksCache = [];
 
@@ -1214,8 +1594,31 @@
       }
     }
 
+    async function promptNewBookType() {
+      const typeName = prompt('Enter new Book Category / Type name:');
+      if (!typeName || !typeName.trim()) return;
+      try {
+        const res = await fetch('/api/booktypes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bookTypeName: typeName.trim() })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Category created successfully!');
+          await loadBookTypes();
+          document.getElementById('cboBookType').value = data.bookTypeID;
+        } else {
+          alert('Error creating category: ' + data.error);
+        }
+      } catch (err) {
+        alert('Failed: ' + err.message);
+      }
+    }
+
     async function loadBooks() {
       await loadBookTypes();
+      await populateAuthorDropdown();
       try {
         const res = await fetch('/api/books');
         booksCache = await res.json();
@@ -1235,7 +1638,7 @@
           <td>${b.bookTitle || ''}</td>
           <td>${b.bookTypeName || ''}</td>
           <td>${b.numOfPages || 0}</td>
-          <td>${b.numCopies || 0}</td>
+          <td style="font-weight: bold; color: ${b.numCopies > 0 ? '#137333' : '#c5221f'};">${b.numCopies || 0}</td>
           <td>${b.edition || ''}</td>
           <td>${b.publisher || ''}</td>
         `;
@@ -1244,10 +1647,11 @@
       });
     }
 
-    function selectBookRow(rowEl, b) {
+    async function selectBookRow(rowEl, b) {
       document.querySelectorAll('#dgvBooks tr').forEach(r => r.classList.remove('selected'));
       rowEl.classList.add('selected');
 
+      selectedBookID = b.bookID;
       document.getElementById('txtBookID').value = b.bookID;
       document.getElementById('txtBookTitle').value = b.bookTitle || '';
       document.getElementById('cboBookType').value = b.bookTypeID;
@@ -1258,6 +1662,9 @@
       document.getElementById('txtPublisher').value = b.publisher || '';
       document.getElementById('txtBookSource').value = b.bookSource || '';
       document.getElementById('txtRemark').value = b.remark || '';
+
+      document.getElementById('lblBookAuthorContext').textContent = `Book #${b.bookID}: "${b.bookTitle}"`;
+      loadBookAuthors(b.bookID);
     }
 
     function newBook() {
@@ -1266,6 +1673,7 @@
     }
 
     function clearBookForm() {
+      selectedBookID = null;
       document.getElementById('txtBookID').value = '';
       document.getElementById('txtBookTitle').value = '';
       document.getElementById('nudNumOfPages').value = 350;
@@ -1274,6 +1682,8 @@
       document.getElementById('txtPublisher').value = '';
       document.getElementById('txtBookSource').value = '';
       document.getElementById('txtRemark').value = '';
+      document.getElementById('lblBookAuthorContext').textContent = 'Select a book above to view authors';
+      document.getElementById('tbodyBookAuthors').innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888;">Select a book to display linked authors.</td></tr>';
       document.querySelectorAll('#dgvBooks tr').forEach(r => r.classList.remove('selected'));
     }
 
@@ -1381,33 +1791,716 @@
       }
     }
 
+    // BookAuthor association helper
+    async function populateAuthorDropdown() {
+      try {
+        const res = await fetch('/api/authors');
+        const authors = await res.json();
+        const sel = document.getElementById('cboAssignAuthor');
+        sel.innerHTML = '<option value="">-- Choose Author to Link --</option>';
+        authors.forEach(a => {
+          const opt = document.createElement('option');
+          opt.value = a.authorID;
+          opt.textContent = `#${a.authorID} - ${a.authorName}`;
+          sel.appendChild(opt);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function loadBookAuthors(bookId) {
+      const tbody = document.getElementById('tbodyBookAuthors');
+      try {
+        const res = await fetch(`/api/bookauthors/${bookId}`);
+        const list = await res.json();
+        if (!list || list.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888;">No authors linked to this book yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = list.map(item => `
+          <tr>
+            <td>${item.authorID}</td>
+            <td><strong>${item.authorName || ''}</strong></td>
+            <td>${item.authorDate || '-'}</td>
+            <td>${item.remark || '-'}</td>
+            <td>
+              <button class="std-btn" style="height: 22px; font-size: 11px; padding: 0 6px; min-width: auto; color: #c5221f;" onclick="removeAuthorFromBook(${item.bookID}, ${item.authorID})">Unlink</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" style="color: red;">Error: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function addAuthorToBook() {
+      if (!selectedBookID) {
+        alert('Please select a book first.');
+        return;
+      }
+      const authorId = document.getElementById('cboAssignAuthor').value;
+      if (!authorId) {
+        alert('Please choose an author to link.');
+        return;
+      }
+      const remark = document.getElementById('txtAssignAuthorRemark').value.trim();
+
+      try {
+        const res = await fetch('/api/bookauthors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bookID: selectedBookID,
+            authorID: parseInt(authorId),
+            remark: remark || null
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Author linked successfully.');
+          document.getElementById('txtAssignAuthorRemark').value = '';
+          loadBookAuthors(selectedBookID);
+        } else {
+          alert('Failed to link author: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function removeAuthorFromBook(bookId, authorId) {
+      if (!confirm('Unlink this author from the book?')) return;
+      try {
+        const res = await fetch(`/api/bookauthors/${bookId}/${authorId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Author unlinked.');
+          loadBookAuthors(bookId);
+        } else {
+          alert('Failed: ' + data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
     // ==========================================
-    // DASHBOARD
+    // 4. CIRCULATION: BORROW
+    // ==========================================
+    let borrowsCache = [];
+    let booksLookup = [];
+
+    async function loadBorrowView() {
+      // Set default date to today
+      document.getElementById('dtpBorrowDate').value = new Date().toISOString().split('T')[0];
+
+      // Populate dropdowns
+      try {
+        const [sRes, bRes, lRes] = await Promise.all([
+          fetch('/api/students'),
+          fetch('/api/books'),
+          fetch('/api/librarians')
+        ]);
+        const students = await sRes.json();
+        booksLookup = await bRes.json();
+        const librarians = await lRes.json();
+
+        const sSel = document.getElementById('cboBorrowStudent');
+        sSel.innerHTML = '<option value="">-- Choose Student --</option>';
+        students.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.stuID;
+          opt.textContent = `#${s.stuID} - ${s.stuName} (${s.phone || 'No phone'})`;
+          sSel.appendChild(opt);
+        });
+
+        const bSel = document.getElementById('cboBorrowBook');
+        bSel.innerHTML = '<option value="">-- Choose Book --</option>';
+        booksLookup.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b.bookID;
+          opt.textContent = `#${b.bookID} - ${b.bookTitle} (Stock: ${b.numCopies})`;
+          bSel.appendChild(opt);
+        });
+
+        const lSel = document.getElementById('cboBorrowLibrarian');
+        lSel.innerHTML = '<option value="">-- Choose Librarian --</option>';
+        librarians.forEach(l => {
+          const opt = document.createElement('option');
+          opt.value = l.libID;
+          opt.textContent = `#${l.libID} - ${l.libName}`;
+          lSel.appendChild(opt);
+        });
+
+        loadBorrows();
+      } catch (err) {
+        showToast('Error initializing borrow view: ' + err.message);
+      }
+    }
+
+    function onBorrowBookChange() {
+      const bookId = document.getElementById('cboBorrowBook').value;
+      if (!bookId) {
+        document.getElementById('txtBorrowStock').value = '';
+        return;
+      }
+      const book = booksLookup.find(b => b.bookID == bookId);
+      if (book) {
+        document.getElementById('txtBorrowStock').value = `${book.numCopies} available in library catalog`;
+      }
+    }
+
+    async function loadBorrows() {
+      try {
+        const res = await fetch('/api/borrows');
+        borrowsCache = await res.json();
+        renderBorrowsGrid(borrowsCache);
+      } catch (err) {
+        showToast('Error loading borrows: ' + err.message);
+      }
+    }
+
+    function renderBorrowsGrid(data) {
+      const tbody = document.querySelector('#dgvBorrows tbody');
+      tbody.innerHTML = '';
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 20px; color: #777;">No borrow records found.</td></tr>';
+        return;
+      }
+      data.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 600;">${r.borrowID}</td>
+          <td>${r.stuName || ''}</td>
+          <td>${r.bookTitle || ''}</td>
+          <td>${r.borrowDate || '-'}</td>
+          <td>${r.qtyBorrow}</td>
+          <td>
+            ${r.isReturned 
+              ? '<span class="badge-returned">Returned</span>' 
+              : '<span class="badge-active">Active Borrow</span>'}
+          </td>
+          <td>${r.returnDate || '-'}</td>
+          <td>${r.libName || ''}</td>
+          <td>
+            ${!r.isReturned 
+              ? `<button class="std-btn" style="height: 22px; font-size: 11px; padding: 0 6px; min-width: auto; background: #0078d7; color: white;" onclick="quickReturn(${r.borrowID})">Return</button>`
+              : '-'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function clearBorrowForm() {
+      document.getElementById('cboBorrowStudent').value = '';
+      document.getElementById('cboBorrowBook').value = '';
+      document.getElementById('cboBorrowLibrarian').value = '';
+      document.getElementById('nudBorrowQty').value = 1;
+      document.getElementById('txtBorrowStock').value = '';
+      document.getElementById('txtBorrowRemark').value = '';
+    }
+
+    async function issueBorrowLoan() {
+      const stuId = document.getElementById('cboBorrowStudent').value;
+      const bookId = document.getElementById('cboBorrowBook').value;
+      const libId = document.getElementById('cboBorrowLibrarian').value;
+      const qty = parseInt(document.getElementById('nudBorrowQty').value) || 1;
+      const remark = document.getElementById('txtBorrowRemark').value.trim();
+
+      if (!stuId) { alert('Please select a student.'); return; }
+      if (!bookId) { alert('Please select a book to borrow.'); return; }
+      if (!libId) { alert('Please select the issuing librarian.'); return; }
+      if (qty <= 0) { alert('Quantity must be greater than zero.'); return; }
+
+      const payload = {
+        stuID: parseInt(stuId),
+        bookID: parseInt(bookId),
+        libID: parseInt(libId),
+        qtyBorrow: qty,
+        remark: remark || null
+      };
+
+      try {
+        const res = await fetch('/api/borrows', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Borrow loan issued successfully! ID: #${data.borrowID}`);
+          clearBorrowForm();
+          loadBorrowView();
+        } else {
+          alert('Issue borrow failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Failed to issue borrow: ' + err.message);
+      }
+    }
+
+    function quickReturn(borrowId) {
+      showView('return');
+      setTimeout(() => {
+        const sel = document.getElementById('cboReturnBorrow');
+        sel.value = borrowId;
+        onReturnBorrowChange();
+      }, 300);
+    }
+
+    // ==========================================
+    // 5. CIRCULATION: RETURN
+    // ==========================================
+    let returnsCache = [];
+    let activeBorrowsList = [];
+
+    async function loadReturnView() {
+      document.getElementById('dtpReturnDate').value = new Date().toISOString().split('T')[0];
+
+      try {
+        const [bRes, lRes, rRes] = await Promise.all([
+          fetch('/api/borrows'),
+          fetch('/api/librarians'),
+          fetch('/api/returns')
+        ]);
+        const borrows = await bRes.json();
+        const librarians = await lRes.json();
+        returnsCache = await rRes.json();
+
+        // Filter unreturned borrows
+        activeBorrowsList = borrows.filter(b => !b.isReturned);
+
+        const bSel = document.getElementById('cboReturnBorrow');
+        bSel.innerHTML = '<option value="">-- Choose Active Borrow Transaction --</option>';
+        activeBorrowsList.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b.borrowID;
+          opt.textContent = `Loan #${b.borrowID} - ${b.stuName}: "${b.bookTitle}" (Qty: ${b.qtyBorrow})`;
+          bSel.appendChild(opt);
+        });
+
+        const lSel = document.getElementById('cboReturnLibrarian');
+        lSel.innerHTML = '<option value="">-- Choose Librarian --</option>';
+        librarians.forEach(l => {
+          const opt = document.createElement('option');
+          opt.value = l.libID;
+          opt.textContent = `#${l.libID} - ${l.libName}`;
+          lSel.appendChild(opt);
+        });
+
+        renderReturnsGrid(returnsCache);
+      } catch (err) {
+        showToast('Error loading return view: ' + err.message);
+      }
+    }
+
+    function onReturnBorrowChange() {
+      const borrowId = document.getElementById('cboReturnBorrow').value;
+      if (!borrowId) {
+        clearReturnForm();
+        return;
+      }
+      const b = activeBorrowsList.find(x => x.borrowID == borrowId);
+      if (b) {
+        document.getElementById('txtReturnStudentName').value = b.stuName || '';
+        document.getElementById('txtReturnBookTitle').value = b.bookTitle || '';
+        document.getElementById('nudReturnQty').value = b.qtyBorrow || 1;
+      }
+    }
+
+    function clearReturnForm() {
+      document.getElementById('cboReturnBorrow').value = '';
+      document.getElementById('txtReturnStudentName').value = '';
+      document.getElementById('txtReturnBookTitle').value = '';
+      document.getElementById('cboReturnLibrarian').value = '';
+      document.getElementById('nudReturnQty').value = 1;
+      document.getElementById('txtReturnRemark').value = 'Returned on time, good condition';
+    }
+
+    async function loadReturns() {
+      try {
+        const res = await fetch('/api/returns');
+        returnsCache = await res.json();
+        renderReturnsGrid(returnsCache);
+      } catch (err) {
+        showToast('Error loading returns: ' + err.message);
+      }
+    }
+
+    function renderReturnsGrid(data) {
+      const tbody = document.querySelector('#dgvReturns tbody');
+      tbody.innerHTML = '';
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #777;">No return records found.</td></tr>';
+        return;
+      }
+      data.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 600;">${r.returnID}</td>
+          <td>${r.borrowID}</td>
+          <td>${r.student || ''}</td>
+          <td>${r.book || ''}</td>
+          <td>${r.qtyReturn}</td>
+          <td>${r.returnDate || '-'}</td>
+          <td>${r.librarian || ''}</td>
+          <td>${r.remark || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function processReturn() {
+      const borrowId = document.getElementById('cboReturnBorrow').value;
+      const libId = document.getElementById('cboReturnLibrarian').value;
+      const qty = parseInt(document.getElementById('nudReturnQty').value) || 1;
+      const remark = document.getElementById('txtReturnRemark').value.trim();
+
+      if (!borrowId) { alert('Please select an active borrow record to return.'); return; }
+      if (!libId) { alert('Please select the receiving librarian.'); return; }
+
+      const borrowObj = activeBorrowsList.find(b => b.borrowID == borrowId);
+      if (!borrowObj) { alert('Borrow transaction not found.'); return; }
+
+      const payload = {
+        borrowID: parseInt(borrowId),
+        bookID: borrowObj.bookID,
+        libID: parseInt(libId),
+        qtyReturn: qty,
+        remark: remark || 'Returned via system'
+      };
+
+      try {
+        const res = await fetch('/api/returns', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Book returned successfully! Return Receipt #${data.returnID}`);
+          clearReturnForm();
+          loadReturnView();
+        } else {
+          alert('Return failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // ==========================================
+    // 6. LIBRARIANS CRUD
+    // ==========================================
+    let librariansCache = [];
+
+    async function loadLibrarians() {
+      try {
+        const res = await fetch('/api/librarians');
+        librariansCache = await res.json();
+        renderLibrariansGrid(librariansCache);
+      } catch (err) {
+        showToast('Error loading librarians: ' + err.message);
+      }
+    }
+
+    function renderLibrariansGrid(data) {
+      const tbody = document.querySelector('#dgvLibrarians tbody');
+      tbody.innerHTML = '';
+      data.forEach(l => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${l.libID}</td>
+          <td>${l.libName || ''}</td>
+          <td>${l.gender || ''}</td>
+          <td>${l.dob || ''}</td>
+          <td>${l.pob || ''}</td>
+          <td>${l.phone || ''}</td>
+          <td>${l.email || ''}</td>
+        `;
+        tr.onclick = () => selectLibrarianRow(tr, l);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function selectLibrarianRow(rowEl, l) {
+      document.querySelectorAll('#dgvLibrarians tr').forEach(r => r.classList.remove('selected'));
+      rowEl.classList.add('selected');
+
+      document.getElementById('txtLibID').value = l.libID;
+      document.getElementById('txtLibName').value = l.libName || '';
+      document.getElementById('cboLibGender').value = l.gender || 'Male';
+      document.getElementById('dtpLibDOB').value = l.dob || '';
+      document.getElementById('txtLibPOB').value = l.pob || '';
+      document.getElementById('txtLibPhone').value = l.phone || '';
+      document.getElementById('txtLibAddress').value = l.address || '';
+      document.getElementById('txtLibEmail').value = l.email || '';
+
+      const photoBox = document.getElementById('libPhotoBox');
+      if (l.photo) {
+        libPhotoBase64 = l.photo;
+        photoBox.innerHTML = `<img src="data:image/jpeg;base64,${l.photo}" />`;
+      } else {
+        libPhotoBase64 = null;
+        photoBox.innerHTML = `<span style="color: #888; font-size: 11px;">No Photo</span>`;
+      }
+    }
+
+    function newLibrarian() {
+      clearLibrarianForm();
+      document.getElementById('txtLibName').focus();
+    }
+
+    function clearLibrarianForm() {
+      document.getElementById('txtLibID').value = '';
+      document.getElementById('txtLibName').value = '';
+      document.getElementById('cboLibGender').value = 'Male';
+      document.getElementById('dtpLibDOB').value = '';
+      document.getElementById('txtLibPOB').value = '';
+      document.getElementById('txtLibPhone').value = '';
+      document.getElementById('txtLibAddress').value = '';
+      document.getElementById('txtLibEmail').value = '';
+      document.getElementById('libPhotoBox').innerHTML = `<span style="color: #888; font-size: 11px;">No Photo</span>`;
+      libPhotoBase64 = null;
+      document.querySelectorAll('#dgvLibrarians tr').forEach(r => r.classList.remove('selected'));
+    }
+
+    async function saveLibrarian() {
+      const name = document.getElementById('txtLibName').value.trim();
+      if (!name) { alert('Librarian Name is required.'); return; }
+
+      const payload = {
+        libName: name,
+        gender: document.getElementById('cboLibGender').value,
+        dob: document.getElementById('dtpLibDOB').value || null,
+        pob: document.getElementById('txtLibPOB').value.trim() || null,
+        address: document.getElementById('txtLibAddress').value.trim() || null,
+        phone: document.getElementById('txtLibPhone').value.trim() || null,
+        email: document.getElementById('txtLibEmail').value.trim() || null,
+        photo: libPhotoBase64
+      };
+
+      try {
+        const res = await fetch('/api/librarians', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Librarian saved successfully! ID: ${data.libID}`);
+          loadLibrarians();
+          clearLibrarianForm();
+        } else {
+          alert('Save failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Save failed: ' + err.message);
+      }
+    }
+
+    async function updateLibrarian() {
+      const id = document.getElementById('txtLibID').value;
+      if (!id) { alert('Please select a librarian to update.'); return; }
+
+      const name = document.getElementById('txtLibName').value.trim();
+      if (!name) { alert('Librarian Name is required.'); return; }
+
+      const payload = {
+        libName: name,
+        gender: document.getElementById('cboLibGender').value,
+        dob: document.getElementById('dtpLibDOB').value || null,
+        pob: document.getElementById('txtLibPOB').value.trim() || null,
+        address: document.getElementById('txtLibAddress').value.trim() || null,
+        phone: document.getElementById('txtLibPhone').value.trim() || null,
+        email: document.getElementById('txtLibEmail').value.trim() || null,
+        photo: libPhotoBase64
+      };
+
+      try {
+        const res = await fetch(`/api/librarians/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Librarian updated successfully.');
+          loadLibrarians();
+        } else {
+          alert('Update failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Update failed: ' + err.message);
+      }
+    }
+
+    async function deleteLibrarian() {
+      const id = document.getElementById('txtLibID').value;
+      if (!id) { alert('Please select a librarian to delete.'); return; }
+
+      if (!confirm('Are you sure you want to delete this librarian?')) return;
+
+      try {
+        const res = await fetch(`/api/librarians/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Librarian deleted successfully.');
+          loadLibrarians();
+          clearLibrarianForm();
+        } else {
+          alert('Delete failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Delete failed: ' + err.message);
+      }
+    }
+
+    // ==========================================
+    // 7. USER ACCOUNTS (1-to-1 with Librarian)
+    // ==========================================
+    let usersCache = [];
+
+    async function loadUsers() {
+      try {
+        const [uRes, lRes] = await Promise.all([
+          fetch('/api/users'),
+          fetch('/api/librarians')
+        ]);
+        usersCache = await uRes.json();
+        const librarians = await lRes.json();
+
+        const sel = document.getElementById('cboUserLibID');
+        sel.innerHTML = '<option value="">-- Choose Librarian Staff Member --</option>';
+        librarians.forEach(l => {
+          const opt = document.createElement('option');
+          opt.value = l.libID;
+          opt.textContent = `#${l.libID} - ${l.libName} (${l.email || 'No email'})`;
+          sel.appendChild(opt);
+        });
+
+        renderUsersGrid(usersCache);
+      } catch (err) {
+        showToast('Error loading users: ' + err.message);
+      }
+    }
+
+    function renderUsersGrid(data) {
+      const tbody = document.querySelector('#dgvUsers tbody');
+      tbody.innerHTML = '';
+      data.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${u.libID}</td>
+          <td><strong>${u.userName}</strong></td>
+          <td>${u.libName || ''}</td>
+          <td><span style="background: #e8f0fe; color: #1a73e8; padding: 2px 8px; border-radius: 3px; font-weight: 600;">${u.userType}</span></td>
+          <td>${u.email || '-'}</td>
+        `;
+        tr.onclick = () => selectUserRow(tr, u);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function selectUserRow(rowEl, u) {
+      document.querySelectorAll('#dgvUsers tr').forEach(r => r.classList.remove('selected'));
+      rowEl.classList.add('selected');
+
+      document.getElementById('cboUserLibID').value = u.libID;
+      document.getElementById('txtUserUsername').value = u.userName;
+      document.getElementById('cboUserType').value = u.userType || 'Librarian';
+      document.getElementById('txtUserPassword').value = '';
+    }
+
+    function onUserLibSelect() {
+      const libId = document.getElementById('cboUserLibID').value;
+      if (!libId) return;
+      const existingUser = usersCache.find(u => u.libID == libId);
+      if (existingUser) {
+        document.getElementById('txtUserUsername').value = existingUser.userName;
+        document.getElementById('cboUserType').value = existingUser.userType || 'Librarian';
+      }
+    }
+
+    function clearUserForm() {
+      document.getElementById('cboUserLibID').value = '';
+      document.getElementById('txtUserUsername').value = '';
+      document.getElementById('txtUserPassword').value = '';
+      document.getElementById('cboUserType').value = 'Librarian';
+      document.querySelectorAll('#dgvUsers tr').forEach(r => r.classList.remove('selected'));
+    }
+
+    async function saveUserAccount() {
+      const libId = document.getElementById('cboUserLibID').value;
+      const username = document.getElementById('txtUserUsername').value.trim();
+      const password = document.getElementById('txtUserPassword').value.trim();
+      const role = document.getElementById('cboUserType').value;
+
+      if (!libId) { alert('Please select a Librarian staff member.'); return; }
+      if (!username) { alert('Username is required.'); return; }
+      if (!password) { alert('Password is required.'); return; }
+
+      const payload = {
+        libID: parseInt(libId),
+        userName: username,
+        userPassword: password,
+        userType: role
+      };
+
+      try {
+        const res = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('User account saved successfully!');
+          loadUsers();
+          clearUserForm();
+        } else {
+          alert('Save user failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // ==========================================
+    // 8. DASHBOARD
     // ==========================================
     let dashData = {
       students: [],
       books: [],
       authors: [],
-      borrows: []
+      borrows: [],
+      librarians: []
     };
     let currentDashTab = 'borrows';
 
     async function loadDashboard() {
       try {
-        const [sRes, bRes, aRes, borrowRes] = await Promise.all([
+        const [sRes, bRes, aRes, borrowRes, libRes] = await Promise.all([
           fetch('/api/students'),
           fetch('/api/books'),
           fetch('/api/authors'),
-          fetch('/api/borrows')
+          fetch('/api/borrows'),
+          fetch('/api/librarians')
         ]);
         dashData.students = await sRes.json();
         dashData.books = await bRes.json();
         dashData.authors = await aRes.json();
         dashData.borrows = await borrowRes.json();
+        dashData.librarians = await libRes.json();
 
         document.getElementById('dashStudentCount').textContent = dashData.students.length;
         document.getElementById('dashBookCount').textContent = dashData.books.length;
         document.getElementById('dashAuthorCount').textContent = dashData.authors.length;
+
+        const activeCount = dashData.borrows.filter(b => !b.isReturned).length;
+        document.getElementById('dashBorrowCount').textContent = activeCount;
 
         renderDashTable();
       } catch (err) {
@@ -1417,19 +2510,21 @@
 
     function switchDashTable(tab) {
       currentDashTab = tab;
-      const tabs = ['borrows', 'books', 'students'];
+      const tabs = ['borrows', 'books', 'students', 'librarians'];
       tabs.forEach(t => {
         const btn = document.getElementById('btnDash' + t.charAt(0).toUpperCase() + t.slice(1));
-        if (t === tab) {
-          btn.style.background = '#0078d7';
-          btn.style.color = 'white';
-          btn.style.borderColor = '#005a9e';
-          btn.style.fontWeight = '600';
-        } else {
-          btn.style.background = '#e1e1e1';
-          btn.style.color = '#111';
-          btn.style.borderColor = '#adadad';
-          btn.style.fontWeight = '500';
+        if (btn) {
+          if (t === tab) {
+            btn.style.background = '#0078d7';
+            btn.style.color = 'white';
+            btn.style.borderColor = '#005a9e';
+            btn.style.fontWeight = '600';
+          } else {
+            btn.style.background = '#e1e1e1';
+            btn.style.color = '#111';
+            btn.style.borderColor = '#adadad';
+            btn.style.fontWeight = '500';
+          }
         }
       });
       renderDashTable();
@@ -1467,8 +2562,8 @@
             <td>${r.qtyBorrow}</td>
             <td>
               ${r.isReturned 
-                ? '<span style="background: #e6f4ea; color: #137333; font-weight: 600; padding: 2px 8px; border-radius: 3px; font-size: 11px;">Returned</span>'
-                : '<span style="background: #fce8e6; color: #c5221f; font-weight: 600; padding: 2px 8px; border-radius: 3px; font-size: 11px;">Active Borrow</span>'}
+                ? '<span class="badge-returned">Returned</span>'
+                : '<span class="badge-active">Active Borrow</span>'}
             </td>
             <td>${r.returnDate || '-'}</td>
             <td>${r.libName || ''}</td>
@@ -1528,6 +2623,34 @@
             <td>${s.phone || '-'}</td>
             <td>${s.email || '-'}</td>
             <td>${s.pob || '-'}</td>
+          </tr>
+        `).join('');
+      } else if (currentDashTab === 'librarians') {
+        title.textContent = 'Librarian Staff Directory';
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 70px;">Lib ID</th>
+            <th>Staff Name</th>
+            <th style="width: 80px;">Gender</th>
+            <th style="width: 110px;">DOB</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Location / Address</th>
+          </tr>
+        `;
+        if (!dashData.librarians || dashData.librarians.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px; color: #777;">No librarians found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = dashData.librarians.map(l => `
+          <tr>
+            <td style="font-weight: 600;">${l.libID}</td>
+            <td>${l.libName || ''}</td>
+            <td>${l.gender || ''}</td>
+            <td>${l.dob || '-'}</td>
+            <td>${l.phone || '-'}</td>
+            <td>${l.email || '-'}</td>
+            <td>${l.address || '-'}</td>
           </tr>
         `).join('');
       }

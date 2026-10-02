@@ -432,7 +432,7 @@ BEGIN
 END;
 /
 
--- 4.2 Select All Librarians (For staff dropdowns)
+-- 4.2 Select All Librarians (For staff dropdowns and management)
 CREATE OR REPLACE PROCEDURE SP_LIBRARIAN_SELECT_ALL
 (
     p_cursor OUT SYS_REFCURSOR
@@ -440,9 +440,9 @@ CREATE OR REPLACE PROCEDURE SP_LIBRARIAN_SELECT_ALL
 AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT LibID, LibName, Gender, DOB, POB, Address, Phone, Email
+        SELECT LibID, LibName, Gender, DOB, POB, Address, Phone, Email, Photo
         FROM Librarian
-        ORDER BY LibName ASC;
+        ORDER BY LibID ASC;
 END;
 /
 
@@ -597,4 +597,205 @@ BEGIN
         ORDER BY BorrowID DESC;
 END;
 /
+
+-- 4.8 Librarian Management
+CREATE OR REPLACE PROCEDURE SP_LIBRARIAN_SELECT_BY_ID
+(
+    p_lib_id IN  NUMBER,
+    p_cursor OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT LibID, LibName, Gender, DOB, POB, Address, Phone, Email, Photo
+        FROM Librarian
+        WHERE LibID = p_lib_id;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE SP_LIBRARIAN_INSERT
+(
+    p_lib_name IN  VARCHAR2,
+    p_gender   IN  VARCHAR2,
+    p_dob      IN  DATE,
+    p_pob      IN  VARCHAR2,
+    p_address  IN  VARCHAR2,
+    p_phone    IN  VARCHAR2,
+    p_email    IN  VARCHAR2,
+    p_photo    IN  BLOB,
+    p_new_id   OUT NUMBER
+)
+AS
+BEGIN
+    INSERT INTO Librarian
+    (
+        LibName, Gender, DOB, POB, Address, Phone, Email, Photo
+    )
+    VALUES
+    (
+        p_lib_name, p_gender, p_dob, p_pob, p_address, p_phone, p_email, p_photo
+    )
+    RETURNING LibID INTO p_new_id;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE SP_LIBRARIAN_UPDATE
+(
+    p_lib_id   IN NUMBER,
+    p_lib_name IN VARCHAR2,
+    p_gender   IN VARCHAR2,
+    p_dob      IN DATE,
+    p_pob      IN VARCHAR2,
+    p_address  IN VARCHAR2,
+    p_phone    IN VARCHAR2,
+    p_email    IN VARCHAR2,
+    p_photo    IN BLOB
+)
+AS
+BEGIN
+    UPDATE Librarian
+    SET LibName = p_lib_name,
+        Gender  = p_gender,
+        DOB     = p_dob,
+        POB     = p_pob,
+        Address = p_address,
+        Phone   = p_phone,
+        Email   = p_email,
+        Photo   = p_photo
+    WHERE LibID = p_lib_id;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE SP_LIBRARIAN_DELETE
+(
+    p_lib_id IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM Librarian WHERE LibID = p_lib_id;
+END;
+/
+
+-- 4.9 BookType Management
+CREATE OR REPLACE PROCEDURE SP_BOOKTYPE_INSERT
+(
+    p_book_type_name IN  VARCHAR2,
+    p_new_id         OUT NUMBER
+)
+AS
+BEGIN
+    INSERT INTO BookType (BookTypeName)
+    VALUES (p_book_type_name)
+    RETURNING BookTypeID INTO p_new_id;
+END;
+/
+
+-- 4.10 BookAuthor Many-to-Many Association
+CREATE OR REPLACE PROCEDURE SP_BOOKAUTHOR_SELECT_BY_BOOK
+(
+    p_book_id IN  NUMBER,
+    p_cursor  OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT ba.BookID, ba.AuthorID, a.AuthorName, ba.AuthorDate, ba.Remark
+        FROM BookAuthor ba
+        JOIN Author a ON ba.AuthorID = a.AuthorID
+        WHERE ba.BookID = p_book_id
+        ORDER BY a.AuthorName ASC;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE SP_BOOKAUTHOR_INSERT
+(
+    p_book_id     IN NUMBER,
+    p_author_id   IN NUMBER,
+    p_author_date IN DATE,
+    p_remark      IN VARCHAR2
+)
+AS
+BEGIN
+    MERGE INTO BookAuthor ba
+    USING DUAL ON (ba.BookID = p_book_id AND ba.AuthorID = p_author_id)
+    WHEN MATCHED THEN
+        UPDATE SET AuthorDate = p_author_date, Remark = p_remark
+    WHEN NOT MATCHED THEN
+        INSERT (BookID, AuthorID, AuthorDate, Remark)
+        VALUES (p_book_id, p_author_id, NVL(p_author_date, SYSDATE), p_remark);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE SP_BOOKAUTHOR_DELETE
+(
+    p_book_id   IN NUMBER,
+    p_author_id IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM BookAuthor WHERE BookID = p_book_id AND AuthorID = p_author_id;
+END;
+/
+
+-- 4.11 Select All Return Records
+CREATE OR REPLACE PROCEDURE SP_RETURN_SELECT_ALL
+(
+    p_cursor OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT 
+            r.ReturnID,
+            r.BorrowID,
+            r.Student,
+            r.Book,
+            r.Librarian,
+            r.QtyReturn,
+            r.ReturnDate,
+            r.Remark
+        FROM VW_RETURN_DETAILS r
+        ORDER BY r.ReturnID DESC;
+END;
+/
+
+-- 4.12 User Accounts Management
+CREATE OR REPLACE PROCEDURE SP_USER_SELECT_ALL
+(
+    p_cursor OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT 
+            u.LibID,
+            u.UserName,
+            u.UserType,
+            l.LibName,
+            l.Email
+        FROM APP_USER u
+        JOIN Librarian l ON u.LibID = l.LibID
+        ORDER BY u.LibID ASC;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE SP_USER_SAVE
+(
+    p_lib_id        IN NUMBER,
+    p_user_name     IN VARCHAR2,
+    p_user_password IN VARCHAR2,
+    p_user_type     IN VARCHAR2
+)
+AS
+BEGIN
+    MERGE INTO APP_USER u
+    USING DUAL ON (u.LibID = p_lib_id)
+    WHEN MATCHED THEN
+        UPDATE SET UserName = p_user_name, UserPassword = p_user_password, UserType = p_user_type
+    WHEN NOT MATCHED THEN
+        INSERT (LibID, UserName, UserPassword, UserType)
+        VALUES (p_lib_id, p_user_name, p_user_password, p_user_type);
+END;
+/
+
 
